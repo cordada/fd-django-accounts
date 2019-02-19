@@ -32,4 +32,4 @@ urlpatterns = [
         view=views.UserListView.as_view(),
         name='User_list',
     ),
-	]
+]
