@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import os
 import re
 import sys
@@ -55,6 +54,7 @@ setup(
     packages=[
         'fd_dj_accounts',
     ],
+    python_requires='>=3.6, <3.8',
     include_package_data=True,
     install_requires=["django-model-utils>=2.0",],
     license="MIT",
@@ -65,7 +65,8 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 )
