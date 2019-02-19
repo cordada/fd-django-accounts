@@ -1,2 +1,2 @@
-django-model-utils>=2.0
+Django<2
 # Additional requirements go here

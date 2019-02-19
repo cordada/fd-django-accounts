@@ -56,7 +56,9 @@ setup(
     ],
     python_requires='>=3.6, <3.8',
     include_package_data=True,
-    install_requires=["django-model-utils>=2.0",],
+    install_requires=[
+        'Django<2',
+    ],
     license="MIT",
     zip_safe=False,
     keywords='fyndata-django-accounts',
