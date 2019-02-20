@@ -1,15 +1,135 @@
+"""Authentication backends for :func:`django.contrib.auth.authenticate`.
+
+This module allows using a custom user model for authentication and
+authorization when ``django.contrib.auth`` is not in ``INSTALLED_APPS``,
+because that app will still play a significant (although subtle) role.
+
+Why? Because, unfortunately, the default authentication backend
+:class:`django.contrib.auth.backends.ModelBackend` requires that the chosen
+auth user model is a subclass of
+:class:`django.contrib.auth.models.AbstractUser`, which is an extremely
+opinionated user model, unlike
+:class:`django.contrib.auth.base_user.AbstractBaseUser`.
+
+The provided backend :class:`AuthUserModelAuthBackend` does not require that
+the project where it is used has :class:`fd_accounts.models.User` set as its
+auth user model.
+
+Notes:
+- It is possible that the developer does not use Django's
+  :func:`django.contrib.auth.authenticate` directly but there are plenty of
+  cases where it is used indirectly e.g.:
+  - In session-backed authentication.
+  - By some third-party packages, such as Django REST Framework's
+    authentication classes (see ``rest_framework.compat.authenticate``).
+- Do not confuse ``django.contrib.auth``'s ``base_user.AbstractBaseUser``
+  with ``models.AbstractUser`` (the latter is a subclass of the former).
+- Although Django names these kind of backends as "Authentication Backends",
+  they are also used for authorization (see
+  https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#handling-authorization-in-custom-backends).
+- The setting ``AUTHENTICATION_BACKENDS`` defines which backends are used.
+
+
+TODO: submit the module's code to the Django project.
+
+"""
+from typing import Any, Optional
+
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Permission
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.http import HttpRequest
+
 
 UserModel = get_user_model()
 
 
-class ModelBackend:
+class AbstractAuthBackend:
+
     """
-    Authenticates against settings.AUTH_USER_MODEL.
+    Minimal abstract auth backend as required by Django.
+
+    Requirements are described in Django docs
+    https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#writing-an-authentication-backend
+
     """
 
-    def authenticate(self, request, username=None, password=None, **kwargs):
+    def authenticate(
+        self,
+        request: Optional[HttpRequest],
+        **kwargs: Any,
+    ) -> Optional[Any]:
+        """
+        Validate credentials and return a user object.
+
+        The keyword arguments must be enough to identify the corresponding user
+        and validate the credentials.
+
+        A common signature for this method is
+        ``authenticate(self, request, username=None, password=None)``.
+
+        :param request: may be None if it wasn't provided to ``authenticate()``,
+            which passes it on to the backend
+        :param kwargs: user's credentials set to check
+        :return: user object that matches the credentials set if they are
+            valid, else None
+
+        """
+        raise NotImplementedError  # pragma: no cover
+
+    def get_user(self, user_id: Any) -> Optional[Any]:
+        """
+        Return user object identified by ``user_id``, if available for auth.
+
+        :param user_id: the primary key of the user object (it could be a
+            username, database ID or however it is defined in the user model),
+            or the string version: ``str(user_id)``
+        :return: user object, if it exists and is usable for authentication,
+            else None
+
+        """
+        raise NotImplementedError  # pragma: no cover
+
+
+class AuthUserModelAuthBackend(AbstractAuthBackend):
+
+    """
+    Authenticate against ``settings.AUTH_USER_MODEL``.
+
+    To use this backend, the selected auth user model must be a subclass of
+    :class:`django.contrib.auth.base_user.AbstractBaseUser` (or be compatible
+    with), and its model manager must be a subclass of
+    :class:`django.contrib.auth.base_user.BaseUserManager` (or be compatible
+    with).
+
+    Thus it is not required that the auth user model be
+    :class:`fd_accounts.models.User`.
+
+    .. seealso::
+
+        Django docs about "Writing an authentication backend"
+        https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#writing-an-authentication-backend
+
+
+    .. note::
+
+        The code is largely based on
+        :class:`django.contrib.auth.backends.ModelBackend`.
+
+    """
+
+    def authenticate(
+        self,
+        request: Optional[HttpRequest],
+        username: Any = None,
+        password: str = None,
+        **kwargs: Any,
+    ) -> Optional[AbstractBaseUser]:
+        # TODO: raise an error if neither arg 'username' nor an arg named as the auth user model
+        #   'USERNAME_FIELD' was provided. By returning None in that case, the function is hiding
+        #   the fact that the call signature was wrong in the first place i.e. swallowing a
+        #   programming error. See test
+        #   'AuthUserModelAuthBackendTestMixin.test_authenticate_bad_username_field'.
+
         if username is None:
             username = kwargs.get(UserModel.USERNAME_FIELD)
         try:
@@ -22,153 +142,18 @@ class ModelBackend:
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
 
-    def user_can_authenticate(self, user):
-        """
-        Reject users with is_active=False. Custom user models that don't have
-        that attribute are allowed.
-        """
-        is_active = getattr(user, 'is_active', None)
-        return is_active or is_active is None
+        return None
 
-    def _get_user_permissions(self, user_obj):
-        return user_obj.user_permissions.all()
-
-    def _get_group_permissions(self, user_obj):
-        user_groups_field = get_user_model()._meta.get_field('groups')
-        user_groups_query = 'group__%s' % user_groups_field.related_query_name()
-        return Permission.objects.filter(**{user_groups_query: user_obj})
-
-    def _get_permissions(self, user_obj, obj, from_name):
+    def user_can_authenticate(self, user: AbstractBaseUser) -> bool:
         """
-        Return the permissions of `user_obj` from `from_name`. `from_name` can
-        be either "group" or "user" to return permissions from
-        `_get_group_permissions` or `_get_user_permissions` respectively.
+        Do not let inactive users authenticate.
         """
-        if not user_obj.is_active or user_obj.is_anonymous or obj is not None:
-            return set()
+        let_user_authenticate: bool = user.is_active
+        return let_user_authenticate
 
-        perm_cache_name = '_%s_perm_cache' % from_name
-        if not hasattr(user_obj, perm_cache_name):
-            if user_obj.is_superuser:
-                perms = Permission.objects.all()
-            else:
-                perms = getattr(self, '_get_%s_permissions' % from_name)(user_obj)
-            perms = perms.values_list('content_type__app_label', 'codename').order_by()
-            setattr(user_obj, perm_cache_name, {"%s.%s" % (ct, name) for ct, name in perms})
-        return getattr(user_obj, perm_cache_name)
-
-    def get_user_permissions(self, user_obj, obj=None):
-        """
-        Return a set of permission strings the user `user_obj` has from their
-        `user_permissions`.
-        """
-        return self._get_permissions(user_obj, obj, 'user')
-
-    def get_group_permissions(self, user_obj, obj=None):
-        """
-        Return a set of permission strings the user `user_obj` has from the
-        groups they belong.
-        """
-        return self._get_permissions(user_obj, obj, 'group')
-
-    def get_all_permissions(self, user_obj, obj=None):
-        if not user_obj.is_active or user_obj.is_anonymous or obj is not None:
-            return set()
-        if not hasattr(user_obj, '_perm_cache'):
-            user_obj._perm_cache = {
-                *self.get_user_permissions(user_obj),
-                *self.get_group_permissions(user_obj),
-            }
-        return user_obj._perm_cache
-
-    def has_perm(self, user_obj, perm, obj=None):
-        return user_obj.is_active and perm in self.get_all_permissions(user_obj, obj)
-
-    def has_module_perms(self, user_obj, app_label):
-        """
-        Return True if user_obj has any permissions in the given app_label.
-        """
-        return user_obj.is_active and any(
-            perm[:perm.index('.')] == app_label
-            for perm in self.get_all_permissions(user_obj)
-        )
-
-    def get_user(self, user_id):
+    def get_user(self, user_id: Any) -> Optional[AbstractBaseUser]:
         try:
             user = UserModel._default_manager.get(pk=user_id)
         except UserModel.DoesNotExist:
             return None
         return user if self.user_can_authenticate(user) else None
-
-
-class AllowAllUsersModelBackend(ModelBackend):
-    def user_can_authenticate(self, user):
-        return True
-
-
-class RemoteUserBackend(ModelBackend):
-    """
-    This backend is to be used in conjunction with the ``RemoteUserMiddleware``
-    found in the middleware module of this package, and is used when the server
-    is handling authentication outside of Django.
-
-    By default, the ``authenticate`` method creates ``User`` objects for
-    usernames that don't already exist in the database.  Subclasses can disable
-    this behavior by setting the ``create_unknown_user`` attribute to
-    ``False``.
-    """
-
-    # Create a User object if not already in the database?
-    create_unknown_user = True
-
-    def authenticate(self, request, remote_user):
-        """
-        The username passed as ``remote_user`` is considered trusted. Return
-        the ``User`` object with the given username. Create a new ``User``
-        object if ``create_unknown_user`` is ``True``.
-
-        Return None if ``create_unknown_user`` is ``False`` and a ``User``
-        object with the given username is not found in the database.
-        """
-        if not remote_user:
-            return
-        user = None
-        username = self.clean_username(remote_user)
-
-        # Note that this could be accomplished in one try-except clause, but
-        # instead we use get_or_create when creating unknown users since it has
-        # built-in safeguards for multiple threads.
-        if self.create_unknown_user:
-            user, created = UserModel._default_manager.get_or_create(**{
-                UserModel.USERNAME_FIELD: username
-            })
-            if created:
-                user = self.configure_user(user)
-        else:
-            try:
-                user = UserModel._default_manager.get_by_natural_key(username)
-            except UserModel.DoesNotExist:
-                pass
-        return user if self.user_can_authenticate(user) else None
-
-    def clean_username(self, username):
-        """
-        Perform any cleaning on the "username" prior to using it to get or
-        create the user object.  Return the cleaned username.
-
-        By default, return the username unchanged.
-        """
-        return username
-
-    def configure_user(self, user):
-        """
-        Configure a user after creation and return the updated user.
-
-        By default, return the user unmodified.
-        """
-        return user
-
-
-class AllowAllUsersRemoteUserBackend(RemoteUserBackend):
-    def user_can_authenticate(self, user):
-        return True

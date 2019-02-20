@@ -33,5 +33,8 @@ MIDDLEWARE = ()
 # auth and package-related
 ###############################################################################
 
+AUTHENTICATION_BACKENDS = [
+    'fd_accounts.auth_backends.AuthUserModelAuthBackend',
+]
 AUTH_USER_MODEL = 'fd_accounts.User'
 FD_ACCOUNTS_SYSTEM_USER = 'accounts-system-user@localhost'
