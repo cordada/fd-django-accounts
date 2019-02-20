@@ -1,36 +1,36 @@
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    UpdateView,
-    ListView
-)
+# from django.views.generic import (
+#     CreateView,
+#     DeleteView,
+#     DetailView,
+#     UpdateView,
+#     ListView
+# )
 
-from .models import (
-    User,
-)
-
-
-class UserCreateView(CreateView):
-
-    model = User
+# from .models import (
+#     User,
+# )
 
 
-class UserDeleteView(DeleteView):
-
-    model = User
-
-
-class UserDetailView(DetailView):
-
-    model = User
+# class UserCreateView(CreateView):
+#
+#     model = User
 
 
-class UserUpdateView(UpdateView):
+# class UserDeleteView(DeleteView):
+#
+#     model = User
 
-    model = User
+
+# class UserDetailView(DetailView):
+#
+#     model = User
 
 
-class UserListView(ListView):
+# class UserUpdateView(UpdateView):
+#
+#     model = User
 
-    model = User
+
+# class UserListView(ListView):
+#
+#     model = User
