@@ -29,6 +29,20 @@ if sys.argv[-1] == 'tag':
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
+# note: the "typing information" of this project's packages is not made available to its users
+#   automatically; it needs to be packaged and distributed. The way to do so is fairly new and
+#   it is specified in PEP 561 - "Distributing and Packaging Type Information".
+#   See:
+#   - https://www.python.org/dev/peps/pep-0561/#packaging-type-information
+#   - https://github.com/python/typing/issues/84
+#   - https://github.com/python/mypy/issues/3930
+_package_data = {
+    'fd_dj_accounts': [
+        # Indicates that the "typing information" of the package should be distributed.
+        'py.typed',
+    ],
+}
+
 setup(
     name='fyndata-django-accounts',
     version=version,
