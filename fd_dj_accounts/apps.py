@@ -20,12 +20,12 @@ def _validate_app_settings() -> None:
     #   there might be other reason for a project to use this app without changing that setting.
 
     try:
-        system_user_email_address = settings.FD_ACCOUNTS_SYSTEM_USER
+        system_user_email_address = settings.APP_ACCOUNTS_SYSTEM_USERNAME
     except AttributeError as exc:
-        msg = "Setting 'FD_ACCOUNTS_SYSTEM_USER' must be set."
+        msg = "Setting 'APP_ACCOUNTS_SYSTEM_USERNAME' must be set."
         raise django.core.exceptions.ImproperlyConfigured(msg) from exc
     try:
         django.core.validators.validate_email(system_user_email_address)
     except django.core.exceptions.ValidationError as exc:
-        msg = "Setting 'FD_ACCOUNTS_SYSTEM_USER' value is not a valid email address."
+        msg = "Setting 'APP_ACCOUNTS_SYSTEM_USERNAME' value is not a valid email address."
         raise django.core.exceptions.ImproperlyConfigured(msg) from exc

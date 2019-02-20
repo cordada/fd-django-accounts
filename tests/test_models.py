@@ -8,7 +8,7 @@ class FunctionsTestCase(TestCase):
     def test_get_or_create_system_user(self):  # type: ignore
         from django.conf import settings
 
-        system_user_email_address = settings.FD_ACCOUNTS_SYSTEM_USER
+        system_user_email_address = settings.APP_ACCOUNTS_SYSTEM_USERNAME
         with self.assertRaises(User.DoesNotExist):
             User.objects.get(email_address=system_user_email_address)
 

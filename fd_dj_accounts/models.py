@@ -47,7 +47,7 @@ def get_or_create_system_user() -> 'User':
     creation, just as if it were any other user, except the password.
 
     """
-    system_user_email_address = settings.FD_ACCOUNTS_SYSTEM_USER
+    system_user_email_address = settings.APP_ACCOUNTS_SYSTEM_USERNAME
     try:
         system_user = User.objects.get(email_address=system_user_email_address)  # type: User
     except User.DoesNotExist:

@@ -36,4 +36,4 @@ AUTHENTICATION_BACKENDS = [
     'fd_dj_accounts.auth_backends.AuthUserModelAuthBackend',
 ]
 AUTH_USER_MODEL = 'fd_dj_accounts.User'
-FD_ACCOUNTS_SYSTEM_USER = 'accounts-system-user@localhost'
+APP_ACCOUNTS_SYSTEM_USERNAME = 'accounts-system-user@localhost'
