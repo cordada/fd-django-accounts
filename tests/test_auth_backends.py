@@ -7,7 +7,7 @@ from django.contrib.auth.hashers import MD5PasswordHasher
 from django.core.signals import setting_changed
 from django.test import TestCase, override_settings
 
-from ..auth_backends import AuthUserModelAuthBackend
+from fd_dj_accounts.auth_backends import AuthUserModelAuthBackend
 from . import utils
 
 
@@ -56,7 +56,7 @@ class AuthUserModelAuthBackendTestMixin:
         self.create_users()
 
     @override_settings(
-        PASSWORD_HASHERS=['fd_accounts.tests.test_auth_backends.CountingMD5PasswordHasher'])  # type: ignore  # noqa: E501
+        PASSWORD_HASHERS=['tests.test_auth_backends.CountingMD5PasswordHasher'])  # type: ignore  # noqa: E501
     def test_authentication_timing(self):  # type: ignore
         """Hasher is run once regardless of whether the user exists. Refs #20760."""
         # Re-set the password, because this tests overrides PASSWORD_HASHERS
@@ -116,10 +116,10 @@ class AuthUserModelAuthBackendTestMixin:
 
 
 @override_settings(
-    AUTHENTICATION_BACKENDS=['fd_accounts.auth_backends.AuthUserModelAuthBackend'],
-    AUTH_USER_MODEL='fd_accounts.User',
+    AUTHENTICATION_BACKENDS=['fd_dj_accounts.auth_backends.AuthUserModelAuthBackend'],
+    AUTH_USER_MODEL='fd_dj_accounts.User',
 )
-class FdAccountsAuthUserModelAuthBackendTest(AuthUserModelAuthBackendTestMixin, TestCase):
+class FdDjAccountsAuthUserModelAuthBackendTest(AuthUserModelAuthBackendTestMixin, TestCase):
 
     non_existent_user_id = uuid.uuid4()
 
@@ -148,13 +148,13 @@ class FdAccountsAuthUserModelAuthBackendTest(AuthUserModelAuthBackendTestMixin, 
 # from django.test import TestCase, modify_settings, override_settings
 #
 # @override_settings(
-#     AUTHENTICATION_BACKENDS=['fd_accounts.auth_backends.AuthUserModelAuthBackend'],
+#     AUTHENTICATION_BACKENDS=['fd_dj_accounts.auth_backends.AuthUserModelAuthBackend'],
 #     AUTH_USER_MODEL='auth.User',
 # )
 # @modify_settings(
 #     INSTALLED_APPS={
 #         'prepend': ['django.contrib.auth', 'django.contrib.contenttypes'],
-#         'remove': 'fd_accounts',
+#         'remove': 'fd_dj_accounts',
 #     },
 # )
 # class StandardUserModelAuthBackendTest(AuthUserModelAuthBackendTestMixin, TestCase):

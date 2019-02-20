@@ -1,7 +1,7 @@
 [
   {
     "pk": "3c45aa62-cc29-4b3b-bff4-b4fb15b78c8c",
-    "model": "fd_accounts.User",
+    "model": "fd_dj_accounts.User",
     "fields": {
       "email_address": "email@example.com",
       "is_active": true,

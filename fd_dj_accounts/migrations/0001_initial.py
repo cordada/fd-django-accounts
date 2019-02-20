@@ -87,7 +87,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.PROTECT,
                         related_name='users_created',
-                        to='fd_accounts.User'
+                        to='fd_dj_accounts.User'
                     )
                 ),
                 (

@@ -1,7 +1,7 @@
 from django.core.validators import validate_email
 from django.test import TestCase
 
-from ..models import User
+from fd_dj_accounts.models import User
 
 from .factories import create_user, generate_email_address
 

@@ -12,8 +12,8 @@ opinionated user model, unlike
 :class:`django.contrib.auth.base_user.AbstractBaseUser`.
 
 The provided backend :class:`AuthUserModelAuthBackend` does not require that
-the project where it is used has :class:`fd_accounts.models.User` set as its
-auth user model.
+the project where it is used has :class:`fd_dj_accounts.models.User`
+set as its auth user model.
 
 Notes:
 - It is possible that the developer does not use Django's
@@ -102,7 +102,7 @@ class AuthUserModelAuthBackend(AbstractAuthBackend):
     with).
 
     Thus it is not required that the auth user model be
-    :class:`fd_accounts.models.User`.
+    :class:`fd_dj_accounts.models.User`.
 
     .. seealso::
 

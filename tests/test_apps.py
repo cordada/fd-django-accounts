@@ -1,7 +1,7 @@
 import django.core.exceptions
 from django.test import SimpleTestCase, override_settings
 
-from ..apps import AccountsAppConfig, _validate_app_settings
+from fd_dj_accounts.apps import AccountsAppConfig, _validate_app_settings
 
 
 @override_settings(FD_ACCOUNTS_SYSTEM_USER='user@example.com')
@@ -10,7 +10,7 @@ class AppConfigTestCase(SimpleTestCase):
     def test_ready(self):  # type: ignore
         from django.apps.registry import apps
 
-        _app_config = apps.app_configs['fd_accounts']
+        _app_config = apps.app_configs['fd_dj_accounts']
         app_config = AccountsAppConfig(
             app_name=_app_config.name,
             app_module=_app_config.module,

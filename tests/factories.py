@@ -1,7 +1,7 @@
 import time
 from typing import Any
 
-from .. import models
+from fd_dj_accounts import models
 
 
 def generate_email_address() -> str:

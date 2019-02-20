@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase, TestCase
 
-from ..models import AnonymousUser, User, UserManager, get_or_create_system_user
+from fd_dj_accounts.models import AnonymousUser, User, UserManager, get_or_create_system_user
 
 
 class FunctionsTestCase(TestCase):

@@ -6,7 +6,9 @@ import django.core.validators
 
 class AccountsAppConfig(AppConfig):
 
-    name = 'fd_accounts'
+    # note: the app name must be the same as the top Python package name (see its docstring).
+    name = 'fd_dj_accounts'
+
     verbose_name = 'Fyndata Accounts'
 
     def ready(self) -> None:
@@ -14,7 +16,7 @@ class AccountsAppConfig(AppConfig):
 
 
 def _validate_app_settings() -> None:
-    # note: we don't validate that setting 'AUTH_USER_MODEL' is set to 'fd_accounts.User' because
+    # note: we don't validate that setting 'AUTH_USER_MODEL' is set to 'fd_dj_accounts.User' because
     #   there might be other reason for a project to use this app without changing that setting.
 
     try:

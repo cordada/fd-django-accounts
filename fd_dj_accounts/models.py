@@ -191,7 +191,7 @@ class User(django.contrib.auth.base_user.AbstractBaseUser):
         null=False,
     )
     created_by = models.ForeignKey(
-        to='fd_accounts.User',
+        to='fd_dj_accounts.User',
         on_delete=models.PROTECT,
         related_name='users_created',
         blank=False,
