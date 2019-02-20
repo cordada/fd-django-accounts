@@ -24,6 +24,14 @@ ROOT_URLCONF = "tests.urls"
 
 INSTALLED_APPS = [
     "fd_dj_accounts",
+    'fd_accounts',
 ]
 
 MIDDLEWARE = ()
+
+###############################################################################
+# auth and package-related
+###############################################################################
+
+AUTH_USER_MODEL = 'fd_accounts.User'
+FD_ACCOUNTS_SYSTEM_USER = 'accounts-system-user@localhost'

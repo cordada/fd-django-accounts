@@ -1,155 +1,118 @@
-from django.contrib import auth
-from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import PermissionDenied
-from django.core.mail import send_mail
+"""User account custom model.
+
+This model is quite similar to the one it replaces
+(:class:`django.contrib.auth.models.User`) (for more details, see
+:class:`User`).
+
+For that customization, the model manager plus the related class
+``AnonymousUser`` had to be recreated as well.
+
+Also, this app introduces the concept of "system user", which makes sense if
+we want to register the actions performed by the app itself, even if those
+correspond to actions executed manually by developers o sysadmins.
+It also is necessary to have it to be able to set the User model field
+``created_by`` when an instance is created on behalf of no "real user".
+
+
+.. note::
+
+    Note that throughout Django code and documentation the term "user" is short
+    for "user account".
+
+
+.. seealso::
+
+    https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#specifying-a-custom-user-model
+    https://docs.djangoproject.com/en/2.1/ref/contrib/auth/#django.contrib.auth.models.User
+
+"""
+from typing import Any, List, Tuple, Type  # noqa: F401
+import uuid
+
+from django.conf import settings
+import django.contrib.auth.base_user
 from django.db import models
-from django.db.models.manager import EmptyManager
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
-
-from .validators import UnicodeUsernameValidator
 
 
-def update_last_login(sender, user, **kwargs):
+def get_or_create_system_user() -> 'User':
+    """Return the "system user", which is created by itself.
+
+    The system user is created, by default:
+    - as active
+    - as superuser (which implies as staff as well)
+    - with unusable password
+
+    However, it is alright to modify any of this user's properties after its
+    creation, just as if it were any other user, except the password.
+
     """
-    A signal receiver which updates the last_login date for
-    the user logging in.
-    """
-    user.last_login = timezone.now()
-    user.save(update_fields=['last_login'])
-
-
-class PermissionManager(models.Manager):
-    use_in_migrations = True
-
-    def get_by_natural_key(self, codename, app_label, model):
-        return self.get(
-            codename=codename,
-            content_type=ContentType.objects.db_manager(self.db).get_by_natural_key(app_label, model),
+    system_user_email_address = settings.FD_ACCOUNTS_SYSTEM_USER
+    try:
+        system_user = User.objects.get(email_address=system_user_email_address)  # type: User
+    except User.DoesNotExist:
+        system_user_uuid = uuid.uuid4()
+        system_user = User(
+            id=system_user_uuid,
+            email_address=system_user_email_address,
+            created_by_id=system_user_uuid,
+            is_staff=True,
+            is_superuser=True,
         )
+        system_user.set_unusable_password()
+
+        # Before calling 'save()' we call the parent class' implementation as a trick to skip
+        #   validating field 'created_by' because it is a self reference. This only makes sense
+        #   when creating a system user.
+        # note: skip mypy check because it yields 'error: "super" used outside class'.
+        #   See: https://github.com/python/mypy/issues/1167
+        super(User, system_user).save()  # type: ignore
+        system_user.save()
+
+    return system_user
 
 
-class Permission(models.Model):
+class UserManager(django.contrib.auth.base_user.BaseUserManager):
+
+    """Manager for the custom user (account) model.
+
+    It is almost identical to :class:`django.contrib.auth.base_user.BaseUserManager`.
+    The changes are:
+    - Default value for field ``created_by`` is the system user.
+    - All those related to removing the field ``username``.
+    - Add type annotations.
+
     """
-    The permissions system provides a way to assign permissions to specific
-    users and groups of users.
 
-    The permission system is used by the Django admin site, but may also be
-    useful in your own code. The Django admin site uses permissions as follows:
+    use_in_migrations = False
 
-        - The "add" permission limits the user's ability to view the "add" form
-          and add an object.
-        - The "change" permission limits a user's ability to view the change
-          list, view the "change" form and change an object.
-        - The "delete" permission limits the ability to delete an object.
-
-    Permissions are set globally per type of object, not per specific object
-    instance. It is possible to say "Mary may change news stories," but it's
-    not currently possible to say "Mary may change news stories, but only the
-    ones she created herself" or "Mary may only change news stories that have a
-    certain status or publication date."
-
-    Three basic permissions -- add, change and delete -- are automatically
-    created for each Django model.
-    """
-    name = models.CharField(_('name'), max_length=255)
-    content_type = models.ForeignKey(
-        ContentType,
-        models.CASCADE,
-        verbose_name=_('content type'),
-    )
-    codename = models.CharField(_('codename'), max_length=100)
-    objects = PermissionManager()
-
-    class Meta:
-        verbose_name = _('permission')
-        verbose_name_plural = _('permissions')
-        unique_together = (('content_type', 'codename'),)
-        ordering = ('content_type__app_label', 'content_type__model',
-                    'codename')
-
-    def __str__(self):
-        return "%s | %s | %s" % (
-            self.content_type.app_label,
-            self.content_type,
-            self.name,
-        )
-
-    def natural_key(self):
-        return (self.codename,) + self.content_type.natural_key()
-    natural_key.dependencies = ['contenttypes.contenttype']
-
-
-class GroupManager(models.Manager):
-    """
-    The manager for the auth's Group model.
-    """
-    use_in_migrations = True
-
-    def get_by_natural_key(self, name):
-        return self.get(name=name)
-
-
-class Group(models.Model):
-    """
-    Groups are a generic way of categorizing users to apply permissions, or
-    some other label, to those users. A user can belong to any number of
-    groups.
-
-    A user in a group automatically has all the permissions granted to that
-    group. For example, if the group 'Site editors' has the permission
-    can_edit_home_page, any user in that group will have that permission.
-
-    Beyond permissions, groups are a convenient way to categorize users to
-    apply some label, or extended functionality, to them. For example, you
-    could create a group 'Special users', and you could write code that would
-    do special things to those users -- such as giving them access to a
-    members-only portion of your site, or sending them members-only email
-    messages.
-    """
-    name = models.CharField(_('name'), max_length=80, unique=True)
-    permissions = models.ManyToManyField(
-        Permission,
-        verbose_name=_('permissions'),
-        blank=True,
-    )
-
-    objects = GroupManager()
-
-    class Meta:
-        verbose_name = _('group')
-        verbose_name_plural = _('groups')
-
-    def __str__(self):
-        return self.name
-
-    def natural_key(self):
-        return (self.name,)
-
-
-class UserManager(BaseUserManager):
-    use_in_migrations = True
-
-    def _create_user(self, username, email, password, **extra_fields):
+    def _create_user(self, email_address: str, password: str = None, **extra_fields: Any) -> 'User':
         """
-        Create and save a user with the given username, email, and password.
+        Create and save a user with the given email address and password.
+
+        If ``password`` is None, it will be set to an unusable one.
+
         """
-        if not username:
-            raise ValueError('The given username must be set')
-        email = self.normalize_email(email)
-        username = self.model.normalize_username(username)
-        user = self.model(username=username, email=email, **extra_fields)
+        if not email_address:
+            raise ValueError('The given email address must be set')
+        email_address = self.normalize_email(email_address)
+        user = self.model(email_address=email_address, **extra_fields)  # type: User
         user.set_password(password)
+
+        # warning: we can not just access foreign key field 'created_by' because if it has not
+        #   been set the exception "User.created_by.RelatedObjectDoesNotExist" will be raised.
+        if not hasattr(user, 'created_by') or user.created_by is None:
+            user.created_by = get_or_create_system_user()
+
         user.save(using=self._db)
         return user
 
-    def create_user(self, username, email=None, password=None, **extra_fields):
+    def create_user(self, email_address: str, password: str = None, **extra_fields: Any) -> 'User':
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
-        return self._create_user(username, email, password, **extra_fields)
+        return self._create_user(email_address, password, **extra_fields)
 
-    def create_superuser(self, username, email, password, **extra_fields):
+    def create_superuser(self, email_address: str, password: str, **extra_fields: Any) -> 'User':
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -158,273 +121,166 @@ class UserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
-        return self._create_user(username, email, password, **extra_fields)
+        return self._create_user(email_address, password, **extra_fields)
 
 
-# A few helper functions for common logic between User and AnonymousUser.
-def _user_get_all_permissions(user, obj):
-    permissions = set()
-    for backend in auth.get_backends():
-        if hasattr(backend, "get_all_permissions"):
-            permissions.update(backend.get_all_permissions(user, obj))
-    return permissions
+class User(django.contrib.auth.base_user.AbstractBaseUser):
 
+    """Custom user model for a user account.
 
-def _user_has_perm(user, perm, obj):
+    It is mostly a customization of :class:`django.contrib.auth.models.User`
+    and its parent class :class:`django.contrib.auth.models.AbstractUser`:
+    - Remove all about groups and permissions.
+    - Delete field ``username``: use ``email_address`` instead (renamed from ``email``).
+    - Change field `id`: UUID instead of int.
+    - Rename ``date_joined`` to ``created_at``.
+    - New fields ``created_by``, ``deactivated_at``.
+    - Remove method ``email_user``.
+    - Remove all about names: ``first_name``, ``last_name``, ``get_short_name``, ``get_full_name``.
+
+    Also add type annotations and some minor changes to comply with ``mypy`` and ``flake8``.
+
     """
-    A backend can raise `PermissionDenied` to short-circuit permission checking.
-    """
-    for backend in auth.get_backends():
-        if not hasattr(backend, 'has_perm'):
-            continue
-        try:
-            if backend.has_perm(user, perm, obj):
-                return True
-        except PermissionDenied:
-            return False
-    return False
 
+    # The name of the field on the user model that is used as the unique identifier.
+    # required
+    USERNAME_FIELD = 'email_address'
 
-def _user_has_module_perms(user, app_label):
-    """
-    A backend can raise `PermissionDenied` to short-circuit permission checking.
-    """
-    for backend in auth.get_backends():
-        if not hasattr(backend, 'has_module_perms'):
-            continue
-        try:
-            if backend.has_module_perms(user, app_label):
-                return True
-        except PermissionDenied:
-            return False
-    return False
+    # required
+    EMAIL_FIELD = 'email_address'
 
+    # note: "'REQUIRED_FIELDS' must contain all required fields on your user model, but should not
+    #   contain the 'USERNAME_FIELD' or 'password' as these fields will always be prompted for."
+    # required
+    REQUIRED_FIELDS = []  # type: List[str]
 
-class PermissionsMixin(models.Model):
-    """
-    Add the fields and methods necessary to support the Group and Permission
-    models using the ModelBackend.
-    """
-    is_superuser = models.BooleanField(
-        _('superuser status'),
-        default=False,
-        help_text=_(
-            'Designates that this user has all permissions without '
-            'explicitly assigning them.'
-        ),
+    # Explicit override of auto-generated integer model field 'id' (primary key).
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
     )
-    groups = models.ManyToManyField(
-        Group,
-        verbose_name=_('groups'),
-        blank=True,
-        help_text=_(
-            'The groups this user belongs to. A user will get all permissions '
-            'granted to each of their groups.'
-        ),
-        related_name="user_set",
-        related_query_name="user",
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        verbose_name=_('user permissions'),
-        blank=True,
-        help_text=_('Specific permissions for this user.'),
-        related_name="user_set",
-        related_query_name="user",
-    )
-
-    class Meta:
-        abstract = True
-
-    def get_group_permissions(self, obj=None):
-        """
-        Return a list of permission strings that this user has through their
-        groups. Query all available auth backends. If an object is passed in,
-        return only permissions matching this object.
-        """
-        permissions = set()
-        for backend in auth.get_backends():
-            if hasattr(backend, "get_group_permissions"):
-                permissions.update(backend.get_group_permissions(self, obj))
-        return permissions
-
-    def get_all_permissions(self, obj=None):
-        return _user_get_all_permissions(self, obj)
-
-    def has_perm(self, perm, obj=None):
-        """
-        Return True if the user has the specified permission. Query all
-        available auth backends, but return immediately if any backend returns
-        True. Thus, a user who has permission from a single auth backend is
-        assumed to have permission in general. If an object is provided, check
-        permissions for that object.
-        """
-        # Active superusers have all permissions.
-        if self.is_active and self.is_superuser:
-            return True
-
-        # Otherwise we need to check the backends.
-        return _user_has_perm(self, perm, obj)
-
-    def has_perms(self, perm_list, obj=None):
-        """
-        Return True if the user has each of the specified permissions. If
-        object is passed, check if the user has all required perms for it.
-        """
-        return all(self.has_perm(perm, obj) for perm in perm_list)
-
-    def has_module_perms(self, app_label):
-        """
-        Return True if the user has any permissions in the given app label.
-        Use similar logic as has_perm(), above.
-        """
-        # Active superusers have all permissions.
-        if self.is_active and self.is_superuser:
-            return True
-
-        return _user_has_module_perms(self, app_label)
-
-
-class AbstractUser(AbstractBaseUser, PermissionsMixin):
-    """
-    An abstract base class implementing a fully featured User model with
-    admin-compliant permissions.
-
-    Username and password are required. Other fields are optional.
-    """
-    username_validator = UnicodeUsernameValidator()
-
-    username = models.CharField(
-        _('username'),
-        max_length=150,
+    email_address = models.EmailField(
         unique=True,
-        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
-        validators=[username_validator],
+        blank=False,
+        null=False,
         error_messages={
-            'unique': _("A user with that username already exists."),
+            'unique': "A user with that email address already exists.",
         },
     )
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=150, blank=True)
-    email = models.EmailField(_('email address'), blank=True)
-    is_staff = models.BooleanField(
-        _('staff status'),
-        default=False,
-        help_text=_('Designates whether the user can log into this admin site.'),
-    )
     is_active = models.BooleanField(
-        _('active'),
         default=True,
-        help_text=_(
-            'Designates whether this user should be treated as active. '
-            'Unselect this instead of deleting accounts.'
+        help_text=(
+            "Whether this user should be treated as enabled. "
+            "Deactivate a user account instead of deleting it."
         ),
     )
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    is_superuser = models.BooleanField(
+        default=False,
+        help_text=(
+            "Designates that this user has all permissions without explicitly assigning them."
+        ),
+    )
+    is_staff = models.BooleanField(
+        default=False,
+        help_text="Designates whether the user can log into this admin site.",
+    )
+    created_at = models.DateTimeField(
+        default=timezone.now,
+        blank=False,
+        null=False,
+    )
+    created_by = models.ForeignKey(
+        to='fd_accounts.User',
+        on_delete=models.PROTECT,
+        related_name='users_created',
+        blank=False,
+        null=False,
+    )
+    deactivated_at = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
 
     objects = UserManager()
 
-    EMAIL_FIELD = 'email'
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
-
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
-        abstract = True
+        verbose_name = 'user'
+        verbose_name_plural = 'users'
 
-    def clean(self):
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Call :meth:`full_clean` before saving."""
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def clean(self) -> None:
+        # note: the username normalization is performed in
+        #   'django.contrib.auth.base_user.AbstractBaseUser.clean()'.
         super().clean()
-        self.email = self.__class__.objects.normalize_email(self.email)
+        klass = self.__class__  # type: Type[User]
+        self.email_address = klass.objects.normalize_email(self.email_address)
 
-    def get_full_name(self):
-        """
-        Return the first_name plus the last_name, with a space in between.
-        """
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
-
-    def get_short_name(self):
-        """Return the short name for the user."""
-        return self.first_name
-
-    def email_user(self, subject, message, from_email=None, **kwargs):
-        """Send an email to this user."""
-        send_mail(subject, message, from_email, [self.email], **kwargs)
-
-
-class User(AbstractUser):
-    """
-    Users within the Django authentication system are represented by this
-    model.
-
-    Username and password are required. Other fields are optional.
-    """
-    class Meta(AbstractUser.Meta):
-        swappable = 'AUTH_USER_MODEL'
+    def deactivate(self) -> None:
+        if self.is_active:
+            self.is_active = False
+        if self.deactivated_at is None:
+            self.deactivated_at = timezone.now()
+        self.save()
 
 
 class AnonymousUser:
+
+    """Class ``AnonymousUser`` corresponding to the custom user model for a user account.
+
+    It is a minor simplification and customization of
+    :class:`django.contrib.auth.models.AnonymousUser`.
+
+    The changes are a reflection of those applied to :class:`User`.
+
+    """
+
     id = None
     pk = None
-    username = ''
+    email_address = ''
     is_staff = False
     is_active = False
     is_superuser = False
-    _groups = EmptyManager(Group)
-    _user_permissions = EmptyManager(Permission)
+    created_at = None
+    created_by = None
+    deactivated_at = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         return 'AnonymousUser'
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         return isinstance(other, self.__class__)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return 1  # instances always return the same hash value
 
-    def save(self):
+    def save(self) -> None:
         raise NotImplementedError("Django doesn't provide a DB representation for AnonymousUser.")
 
-    def delete(self):
+    def delete(self) -> Tuple[int, dict]:
         raise NotImplementedError("Django doesn't provide a DB representation for AnonymousUser.")
 
-    def set_password(self, raw_password):
+    def set_password(self, raw_password: str) -> None:
         raise NotImplementedError("Django doesn't provide a DB representation for AnonymousUser.")
 
-    def check_password(self, raw_password):
+    def check_password(self, raw_password: str) -> bool:
+        raise NotImplementedError("Django doesn't provide a DB representation for AnonymousUser.")
+
+    def deactivate(self) -> None:
         raise NotImplementedError("Django doesn't provide a DB representation for AnonymousUser.")
 
     @property
-    def groups(self):
-        return self._groups
-
-    @property
-    def user_permissions(self):
-        return self._user_permissions
-
-    def get_group_permissions(self, obj=None):
-        return set()
-
-    def get_all_permissions(self, obj=None):
-        return _user_get_all_permissions(self, obj=obj)
-
-    def has_perm(self, perm, obj=None):
-        return _user_has_perm(self, perm, obj=obj)
-
-    def has_perms(self, perm_list, obj=None):
-        return all(self.has_perm(perm, obj) for perm in perm_list)
-
-    def has_module_perms(self, module):
-        return _user_has_module_perms(self, module)
-
-    @property
-    def is_anonymous(self):
+    def is_anonymous(self) -> bool:
         return True
 
     @property
-    def is_authenticated(self):
+    def is_authenticated(self) -> bool:
         return False
 
-    def get_username(self):
-        return self.username
+    def get_username(self) -> str:
+        # Class attribute 'User.USERNAME_FIELD' is 'email_address'.
+        return self.email_address
