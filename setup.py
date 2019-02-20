@@ -57,13 +57,15 @@ setup(
     python_requires='>=3.6, <3.8',
     include_package_data=True,
     install_requires=[
-        'Django<2',
+        'Django>=2.1',
     ],
     license="MIT",
     zip_safe=False,
     keywords='fyndata-django-accounts',
     classifiers=[
+        # See https://pypi.org/classifiers/
         'Development Status :: 3 - Alpha',
+        'Framework :: Django :: 2.1',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',

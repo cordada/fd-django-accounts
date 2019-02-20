@@ -1,2 +1,2 @@
 # Base requirements go here
-Django<2
+Django>=2.1

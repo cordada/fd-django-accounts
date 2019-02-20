@@ -1,34 +1,34 @@
-from django.conf.urls import url
-from django.views.generic import TemplateView
+from django.urls import path
 
 from . import views
 
 
 app_name = 'fd_dj_accounts'
+
 urlpatterns = [
-    url(
-        regex="^User/~create/$",
-        view=views.UserCreateView.as_view(),
+    path(
+        "User/create/",
+        views.UserCreateView.as_view(),
         name='User_create',
     ),
-    url(
-        regex="^User/(?P<pk>\d+)/~delete/$",
-        view=views.UserDeleteView.as_view(),
+    path(
+        "User/<int:pk>/delete/",
+        views.UserDeleteView.as_view(),
         name='User_delete',
     ),
-    url(
-        regex="^User/(?P<pk>\d+)/$",
-        view=views.UserDetailView.as_view(),
+    path(
+        "User/<int:pk>/",
+        views.UserDetailView.as_view(),
         name='User_detail',
     ),
-    url(
-        regex="^User/(?P<pk>\d+)/~update/$",
-        view=views.UserUpdateView.as_view(),
+    path(
+        "User/<int:pk>/update/",
+        views.UserUpdateView.as_view(),
         name='User_update',
     ),
-    url(
-        regex="^User/$",
-        view=views.UserListView.as_view(),
+    path(
+        "User/",
+        views.UserListView.as_view(),
         name='User_list',
     ),
 ]

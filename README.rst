@@ -31,7 +31,7 @@ Add it to your `INSTALLED_APPS`:
 
     INSTALLED_APPS = (
         ...
-        'fd_dj_accounts.apps.AccountsAppConfig',
+        'fd_dj_accounts',
         ...
     )
 
@@ -39,12 +39,9 @@ Add Fyndata Django Accounts's URL patterns:
 
 .. code-block:: python
 
-    from fd_dj_accounts import urls as fd_dj_accounts_urls
-
-
     urlpatterns = [
         ...
-        url(r'^', include(fd_dj_accounts_urls)),
+        path('', include('fd_dj_accounts.urls')),
         ...
     ]
 
