@@ -66,6 +66,7 @@ setup(
     tests_require=[
         # note: include here only packages **imported** in test code (e.g. 'requests-mock'),
         #   NOT those like 'coverage' or 'tox'.
+        'psycopg2-binary>=2.6.7',
     ],
     license="MIT",
     zip_safe=False,

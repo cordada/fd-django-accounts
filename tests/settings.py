@@ -7,9 +7,15 @@ USE_TZ = True
 SECRET_KEY = "^e8thszumk=vywe=-9!6aizo^+h*rf2v8$88*_*@^194&-^3)n"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": ":memory:",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'localhost',
+        'PORT': 5432,
+        'NAME': 'accounts_dev',
+        'USER': 'django_dev',
+        'PASSWORD': 'django_dev',
+        'ATOMIC_REQUESTS': False,
+        'AUTOCOMMIT': True,
     }
 }
 
