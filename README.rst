@@ -8,7 +8,7 @@ Fyndata Django Accounts
 .. image:: https://circleci.com/gh/fyndata/gcp-utils-python/tree/develop.svg?style=shield
     :target: https://circleci.com/gh/fyndata/fyndata-django-accounts/tree/develop
 
-.. image:: https://codecov.io/gh/fyndata/fyndata-django-accounts/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/fyndata/fyndata-django-accounts/branch/develop/graph/badge.svg
     :target: https://codecov.io/gh/fyndata/fyndata-django-accounts
 
 Reusable Django app to replace the default Django user (account) model.
