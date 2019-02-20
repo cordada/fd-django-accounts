@@ -3,7 +3,7 @@ SHELL = /usr/bin/env bash
 .DEFAULT_GOAL := help
 .PHONY: help
 .PHONY: clean clean-build clean-pyc clean-test
-.PHONY: lint test test-all coverage
+.PHONY: lint test test-all test-coverage test-coverage-report-console test-coverage-report-html
 .PHONY: docs dist upload-release
 
 help:
@@ -44,10 +44,14 @@ test: ## run tests quickly with the default Python
 test-all: ## run tests on every Python version with tox
 	tox
 
-coverage: ## check code coverage quickly with the default Python
-	coverage run --source fd_dj_accounts runtests.py tests
-	coverage report -m
-	coverage html
+test-coverage: ## run tests and record test coverage
+	coverage run --rcfile=setup.cfg runtests.py tests
+
+test-coverage-report-console: ## print test coverage summary
+	coverage report --rcfile=setup.cfg -m
+
+test-coverage-report-html: ## generate test coverage HTML report
+	coverage html --rcfile=setup.cfg
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/fd_dj_accounts.rst

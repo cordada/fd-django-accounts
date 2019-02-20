@@ -1,6 +1,6 @@
 -r requirements.txt
 
 codecov>=2.0.0
-coverage==4.4.1
+coverage==4.5.2
 flake8>=2.1.0
-tox>=1.7.0
+tox==3.7.0
