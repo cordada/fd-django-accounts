@@ -1,2 +1,2 @@
+# Base requirements go here
 Django<2
-# Additional requirements go here
