@@ -35,8 +35,9 @@ clean-test: ## remove test, lint and coverage artifacts
 	rm -rf test-reports/
 	rm -rf .mypy_cache/
 
-lint: ## check style with flake8
+lint: ## run tools for code style analysis, static type check, etc
 	flake8  --config=setup.cfg  fd_dj_accounts  tests
+	mypy  --config-file setup.cfg  fd_dj_accounts
 
 test: ## run tests quickly with the default Python
 	python runtests.py tests
