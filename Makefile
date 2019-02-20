@@ -36,7 +36,7 @@ clean-test: ## remove test, lint and coverage artifacts
 	rm -rf .mypy_cache/
 
 lint: ## check style with flake8
-	flake8 fd_dj_accounts tests
+	flake8  --config=setup.cfg  fd_dj_accounts  tests
 
 test: ## run tests quickly with the default Python
 	python runtests.py tests
