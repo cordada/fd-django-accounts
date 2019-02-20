@@ -5,8 +5,8 @@ Fyndata Django Accounts
 .. image:: https://badge.fury.io/py/fyndata-django-accounts.svg
     :target: https://badge.fury.io/py/fyndata-django-accounts
 
-.. image:: https://travis-ci.org/fyndata/fyndata-django-accounts.svg?branch=master
-    :target: https://travis-ci.org/fyndata/fyndata-django-accounts
+.. image:: https://circleci.com/gh/fyndata/gcp-utils-python/tree/develop.svg?style=shield
+    :target: https://circleci.com/gh/fyndata/fyndata-django-accounts/tree/develop
 
 .. image:: https://codecov.io/gh/fyndata/fyndata-django-accounts/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/fyndata/fyndata-django-accounts
