@@ -3,10 +3,7 @@ import os
 import re
 import sys
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import find_packages, setup
 
 
 def get_version(*file_paths):
@@ -23,17 +20,6 @@ def get_version(*file_paths):
 version = get_version("fd_dj_accounts", "__init__.py")
 
 
-if sys.argv[-1] == 'publish':
-    try:
-        import wheel
-        print("Wheel version: ", wheel.__version__)
-    except ImportError:
-        print('Wheel library missing. Please run "pip install wheel"')
-        sys.exit()
-    os.system('python setup.py sdist upload')
-    os.system('python setup.py bdist_wheel upload')
-    sys.exit()
-
 if sys.argv[-1] == 'tag':
     print("Tagging the version on git:")
     os.system("git tag -a %s -m 'version %s'" % (version, version))
@@ -48,16 +34,24 @@ setup(
     version=version,
     description="""Reusable Django app to replace the default Django user (account) model.""",
     long_description=readme + '\n\n' + history,
+    long_description_content_type='text/x-rst',  # for Markdown: 'text/markdown'
     author='Fyndata (Fynpal SpA)',
     author_email='no-reply@fyndata.com',
     url='https://github.com/fyndata/fyndata-django-accounts',
-    packages=[
-        'fd_dj_accounts',
-    ],
+    packages=find_packages(
+        exclude=[
+            'docs',
+            'tests*',
+        ]),
     python_requires='>=3.6, <3.8',
     include_package_data=True,
     install_requires=[
         'Django>=2.1',
+    ],
+    test_suite='tests',
+    tests_require=[
+        # note: include here only packages **imported** in test code (e.g. 'requests-mock'),
+        #   NOT those like 'coverage' or 'tox'.
     ],
     license="MIT",
     zip_safe=False,

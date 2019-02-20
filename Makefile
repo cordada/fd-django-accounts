@@ -4,7 +4,7 @@ SHELL = /usr/bin/env bash
 .PHONY: help
 .PHONY: clean clean-build clean-pyc clean-test
 .PHONY: lint test test-all coverage
-.PHONY: docs release sdist
+.PHONY: docs dist upload-release
 
 help:
 	@grep '^[a-zA-Z]' $(MAKEFILE_LIST) | sort | awk -F ':.*?## ' 'NF==2 {printf "\033[36m  %-25s\033[0m %s\n", $$1, $$2}'
@@ -56,10 +56,11 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
-release: clean ## package and upload a release
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
-
-sdist: clean ## package
+dist: clean ## builds source and wheel package
 	python setup.py sdist
+	python setup.py bdist_wheel
+	twine check dist/*
 	ls -l dist
+
+upload-release: ## upload dist packages
+	python -m twine upload 'dist/*'
