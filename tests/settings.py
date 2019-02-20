@@ -27,3 +27,13 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = ()
+
+###############################################################################
+# package-related settings
+###############################################################################
+
+AUTHENTICATION_BACKENDS = [
+    'fd_dj_accounts.auth_backends.AuthUserModelAuthBackend',
+]
+AUTH_USER_MODEL = 'fd_dj_accounts.User'
+APP_ACCOUNTS_SYSTEM_USERNAME = 'accounts-system-user@localhost'
