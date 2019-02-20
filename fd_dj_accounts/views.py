@@ -34,4 +34,3 @@ class UserUpdateView(UpdateView):
 class UserListView(ListView):
 
     model = User
-

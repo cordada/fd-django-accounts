@@ -8,7 +8,7 @@ Tests for `fyndata-django-accounts` models module.
 
 from django.test import TestCase
 
-from fd_dj_accounts import models
+from fd_dj_accounts import models  # noqa: F401
 
 
 class TestFd_dj_accounts(TestCase):

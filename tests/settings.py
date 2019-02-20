@@ -1,4 +1,4 @@
-import django
+import django  # noqa: F401
 
 DEBUG = True
 USE_TZ = True
