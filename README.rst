@@ -2,18 +2,17 @@
 Fyndata Django Accounts
 =============================
 
-.. image:: https://badge.fury.io/py/fyndata-django-accounts.svg
-    :target: https://badge.fury.io/py/fyndata-django-accounts
+.. image:: https://img.shields.io/pypi/v/fyndata-django-accounts.svg
+    :target: https://pypi.python.org/pypi/fyndata-django-accounts
+    :alt: PyPI package version
 
-.. image:: https://circleci.com/gh/fyndata/gcp-utils-python/tree/develop.svg?style=shield
-    :target: https://circleci.com/gh/fyndata/fyndata-django-accounts/tree/develop
+.. image:: https://img.shields.io/pypi/pyversions/fyndata-django-accounts.svg
+    :target: https://pypi.python.org/pypi/fyndata-django-accounts
+    :alt: Python versions
 
-.. image:: https://codecov.io/gh/fyndata/fyndata-django-accounts/branch/develop/graph/badge.svg
-    :target: https://codecov.io/gh/fyndata/fyndata-django-accounts
-
-.. image:: https://readthedocs.org/projects/fyndata-django-accounts/badge/?version=latest
-    :target: https://fyndata-django-accounts.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
+.. image:: https://img.shields.io/pypi/l/fyndata-django-accounts.svg
+    :target: https://pypi.python.org/pypi/fyndata-django-accounts
+    :alt: License
 
 Reusable Django app to replace the default Django user (account) model.
 
@@ -21,6 +20,21 @@ Documentation
 -------------
 
 The full documentation is at https://fyndata-django-accounts.readthedocs.io.
+
+Status
+-------------
+
+.. image:: https://circleci.com/gh/fyndata/gcp-utils-python/tree/develop.svg?style=shield
+    :target: https://circleci.com/gh/fyndata/fyndata-django-accounts/tree/develop
+    :alt: CI status
+
+.. image:: https://codecov.io/gh/fyndata/fyndata-django-accounts/branch/develop/graph/badge.svg
+    :target: https://codecov.io/gh/fyndata/fyndata-django-accounts
+    :alt: Code coverage
+
+.. image:: https://readthedocs.org/projects/fyndata-django-accounts/badge/?version=latest
+    :target: https://fyndata-django-accounts.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation
 
 Quickstart
 ----------
