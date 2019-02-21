@@ -60,34 +60,38 @@ Ready to contribute? Here's how to set up `fyndata-django-accounts` for local de
 1. Fork the `fyndata-django-accounts` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone git@github.com:your_name_here/fyndata-django-accounts.git
+    git clone git@github.com:fyndata/fyndata-django-accounts.git
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+3. Create a virtualenv and install the requirements for local development and test::
 
-    $ mkvirtualenv fyndata-django-accounts
-    $ cd fyndata-django-accounts/
-    $ python setup.py develop
+    mkvirtualenv -p python3.7 fyndata-django-accounts
+    cd fyndata-django-accounts/
+    pip install -r requirements_test.txt
 
 4. Create a branch for local development::
 
-    $ git checkout -b name-of-your-bugfix-or-feature
+    git checkout -b name-of-your-bugfix-or-feature
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass flake8 and the
-   tests, including testing other Python versions with tox::
+5. When you're done making changes, run test suite for all supported Python versions and
+   run tools for code style analysis, static type check, etc::
 
-        $ flake8 fd_dj_accounts tests
-        $ python setup.py test
-        $ tox
+    make clean
+    make test-all
+    make lint
 
-   To get flake8 and tox, just pip install them into your virtualenv. 
+   Check code coverage of tests::
+
+    make clean
+    make test-coverage
+    make test-coverage-report-console
 
 6. Commit your changes and push your branch to GitHub::
 
-    $ git add .
-    $ git commit -m "Your detailed description of your changes."
-    $ git push origin name-of-your-bugfix-or-feature
+    git add -p
+    git commit -m "Your detailed description of your changes."
+    git push origin name-of-your-bugfix-or-feature
 
 7. Submit a pull request through the GitHub website.
 
@@ -109,4 +113,4 @@ Tips
 
 To run a subset of tests::
 
-    $ python -m unittest tests.test_fd_dj_accounts
+    python -m unittest tests.test_fd_dj_accounts

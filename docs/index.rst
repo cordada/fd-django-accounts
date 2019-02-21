@@ -6,6 +6,8 @@
 Welcome to Fyndata Django Accounts's documentation!
 =================================================================
 
+Reusable Django app to replace the default Django user (account) model.
+
 Contents:
 
 .. toctree::
