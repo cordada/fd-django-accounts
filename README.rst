@@ -11,6 +11,10 @@ Fyndata Django Accounts
 .. image:: https://codecov.io/gh/fyndata/fyndata-django-accounts/branch/develop/graph/badge.svg
     :target: https://codecov.io/gh/fyndata/fyndata-django-accounts
 
+.. image:: https://readthedocs.org/projects/fyndata-django-accounts/badge/?version=latest
+    :target: https://fyndata-django-accounts.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 Reusable Django app to replace the default Django user (account) model.
 
 Documentation
@@ -25,7 +29,7 @@ Install Fyndata Django Accounts::
 
     pip install fyndata-django-accounts
 
-Add it to your `INSTALLED_APPS`:
+Add it to your ``INSTALLED_APPS``:
 
 .. code-block:: python
 
@@ -35,31 +39,48 @@ Add it to your `INSTALLED_APPS`:
         ...
     )
 
-Add Fyndata Django Accounts's URL patterns:
+Set the following Django standard settings:
 
 .. code-block:: python
 
-    urlpatterns = [
-        ...
-        path('', include('fd_dj_accounts.urls')),
-        ...
+    AUTHENTICATION_BACKENDS = [
+        'fd_dj_accounts.auth_backends.AuthUserModelAuthBackend',
     ]
+    AUTH_USER_MODEL = 'fd_dj_accounts.User'
+
+and the following settings created by this app:
+
+.. code-block:: python
+
+    APP_ACCOUNTS_SYSTEM_USERNAME = 'accounts-system-user@localhost'  # arbitrary value
 
 Features
 --------
 
 * TODO
 
-Running Tests
--------------
+Developers
+----------
 
-Does the code actually work?
+See 'CONTRIBUTING.rst'.
 
-::
+Tests
++++++
 
-    source <YOURVIRTUALENV>/bin/activate
-    (myenv) $ pip install tox
-    (myenv) $ tox
+Requirements::
+
+    pip install -r requirements_test.txt
+
+Run test suite for all supported Python versions and run tools for
+code style analysis, static type check, etc::
+
+    make test-all
+    make lint
+
+Check code coverage of tests::
+
+    make test-coverage
+    make test-coverage-report-console
 
 Credits
 -------
