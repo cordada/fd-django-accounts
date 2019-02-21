@@ -1,0 +1,8 @@
+-r requirements.txt
+
+codecov==2.0.15
+coverage==4.5.2
+flake8==3.7.6
+mypy==0.670
+psycopg2-binary==2.7.7
+tox==3.7.0
