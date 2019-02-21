@@ -23,7 +23,17 @@ DATABASES = {
 ROOT_URLCONF = "tests.urls"
 
 INSTALLED_APPS = [
-    "fd_dj_accounts",
+    'fd_dj_accounts',
 ]
 
 MIDDLEWARE = ()
+
+###############################################################################
+# auth and package-related
+###############################################################################
+
+AUTHENTICATION_BACKENDS = [
+    'fd_dj_accounts.auth_backends.AuthUserModelAuthBackend',
+]
+AUTH_USER_MODEL = 'fd_dj_accounts.User'
+APP_ACCOUNTS_SYSTEM_USERNAME = 'accounts-system-user@localhost'
