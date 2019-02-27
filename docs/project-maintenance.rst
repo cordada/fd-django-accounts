@@ -42,39 +42,39 @@ Push commit ``abcd1234`` and tag ``vX.Y.Z`` automatically created by ``bumpversi
 
 3) (GitHub) Create pull request and new release:
 
-- Create PR for
+* Create PR for
   `master...develop <https://github.com/fyndata/fyndata-django-accounts/compare/master...develop>`_.
 
-  - Name: "Release".
+  * Name: "Release".
 
-  - Labels: ``kind: release``.
+  * Labels: ``kind: release``.
 
-  - Description: local output of ``git lg-github-pr-summary master..develop``
+  * Description: same as the new changelog entry.
 
-- Merge PR.
+* Merge PR.
 
-- Create new release:
+* Create new release:
 
-  - Go to the repo's
+  * Go to the repo's
     `"Releases/tags" section <https://github.com/fyndata/fyndata-django-accounts/tags>`_.
 
-  - Create release for the new tag just pushed.
+  * Create release for the new tag just pushed.
 
-  - Title: ``vX.Y.Z``.
+  * Title: ``vX.Y.Z``.
 
-  - Description: same as the PR just created.
+  * Description: same as the PR just created.
 
-  - Go to the CircleCI job named ``ci/circleci: dist`` corresponding to commit ``abcd1234``
+  * Go to the CircleCI job named ``ci/circleci: dist`` corresponding to commit ``abcd1234``
     (tagged ``vX.Y.Z``), tab "Artifacts", and download the generated package files to local repo
     directory ``dist/``:
 
-    - ``fyndata-django-accounts-X.Y.Z.tar.gz``
+    * ``fyndata-django-accounts-X.Y.Z.tar.gz``
 
-    - ``fyndata_django_accounts-X.Y.Z-py3-none-any.whl``
+    * ``fyndata_django_accounts-X.Y.Z-py3-none-any.whl``
 
-  - For the new GitHub release, add the files just downloaded.
+  * For the new GitHub release, add the files just downloaded.
 
-  - "Publish release".
+  * "Publish release".
 
 
 4) (local workstation) Publish to PyPI::
