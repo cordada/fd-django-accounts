@@ -32,6 +32,10 @@ Status
     :target: https://codecov.io/gh/fyndata/fyndata-django-accounts
     :alt: Code coverage
 
+.. image:: https://api.codeclimate.com/v1/badges/30ac22150dbf8549b989/maintainability
+    :target: https://codeclimate.com/github/fyndata/fyndata-django-accounts/maintainability
+    :alt: Code Climate maintainability
+
 .. image:: https://readthedocs.org/projects/fyndata-django-accounts/badge/?version=latest
     :target: https://fyndata-django-accounts.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation
