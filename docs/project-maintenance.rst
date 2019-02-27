@@ -18,7 +18,19 @@ Then wait for the
 `CircleCI tests (develop) <https://circleci.com/gh/fyndata/fyndata-django-accounts/tree/develop>`_
 and verify they were successful.
 
-1) (local workstation) Bump package version (either of the following alternatives)::
+1) (local workstation) Update changelog.
+
+Generate summary::
+
+    git lg-github-pr-summary master..develop
+
+Add new entry to changelog including the changes summary::
+
+    nano 'HISTORY.rst'
+    git add 'HISTORY.rst'
+    git commit -m "HISTORY: update for new version"
+
+2) (local workstation) Bump package version (either of the following alternatives)::
 
     bumpversion major|minor|patch
     bumpversion --new-version 'X.Y.Z'
@@ -28,7 +40,7 @@ Push commit ``abcd1234`` and tag ``vX.Y.Z`` automatically created by ``bumpversi
     git push
     git push --tags
 
-2) (GitHub) Create pull request and release:
+3) (GitHub) Create pull request and new release:
 
 - Create PR for
   `master...develop <https://github.com/fyndata/fyndata-django-accounts/compare/master...develop>`_.
@@ -53,8 +65,8 @@ Push commit ``abcd1234`` and tag ``vX.Y.Z`` automatically created by ``bumpversi
   - Description: same as the PR just created.
 
   - Go to the CircleCI job named ``ci/circleci: dist`` corresponding to commit ``abcd1234``
-    (tagged ``vX.Y.Z``), tab "Artifacts", and download the generated package files to repo directory
-    ``dist/``:
+    (tagged ``vX.Y.Z``), tab "Artifacts", and download the generated package files to local repo
+    directory ``dist/``:
 
     - ``fyndata-django-accounts-X.Y.Z.tar.gz``
 
@@ -65,15 +77,24 @@ Push commit ``abcd1234`` and tag ``vX.Y.Z`` automatically created by ``bumpversi
   - "Publish release".
 
 
-3) (local workstation) Publish to PyPI::
+4) (local workstation) Publish to PyPI::
 
     make upload-release
 
 
-4) (local workstation) Update ``develop`` from ``master``::
+5) (local workstation) Update ``develop`` from ``master``::
 
     git checkout master
     git pull
     git checkout develop
     git merge --ff master
     git push
+
+
+Appendix
+--------
+
+Add git alias::
+
+    git config --global alias.lg-github-pr-summary \
+        '!f() { git log --date=short --merges --grep "^Merge pull request #[[:digit:]]* from" --pretty="tformat:- (%C(auto,red)<S>%s</S>%C(reset), %C(auto,green)%ad%C(reset)) %w(72,0,2)%b" "$@" | sed -E "s|<S>Merge pull request (#[0-9]+) from .+</S>|PR \1|"; }; f'
