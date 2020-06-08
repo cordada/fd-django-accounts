@@ -1,5 +1,5 @@
 =============================
-Fyndata Django Accounts
+FD Django Accounts
 =============================
 
 .. image:: https://img.shields.io/pypi/v/fyndata-django-accounts.svg
@@ -24,13 +24,17 @@ The full documentation is at https://fyndata-django-accounts.readthedocs.io.
 Status
 -------------
 
-.. image:: https://circleci.com/gh/fyndata/gcp-utils-python/tree/develop.svg?style=shield
-    :target: https://circleci.com/gh/fyndata/fyndata-django-accounts/tree/develop
+.. image:: https://circleci.com/gh/fyntex/fd-django-accounts/tree/develop.svg?style=shield
+    :target: https://circleci.com/gh/fyntex/fd-django-accounts/tree/develop
     :alt: CI status
 
-.. image:: https://codecov.io/gh/fyndata/fyndata-django-accounts/branch/develop/graph/badge.svg
-    :target: https://codecov.io/gh/fyndata/fyndata-django-accounts
+.. image:: https://codecov.io/gh/fyntex/fd-django-accounts/branch/develop/graph/badge.svg
+    :target: https://codecov.io/gh/fyntex/fd-django-accounts
     :alt: Code coverage
+
+.. image:: https://api.codeclimate.com/v1/badges/30ac22150dbf8549b989/maintainability
+    :target: https://codeclimate.com/github/fyntex/fd-django-accounts/maintainability
+    :alt: Code Climate maintainability
 
 .. image:: https://readthedocs.org/projects/fyndata-django-accounts/badge/?version=latest
     :target: https://fyndata-django-accounts.readthedocs.io/en/latest/?badge=latest
@@ -39,7 +43,7 @@ Status
 Quickstart
 ----------
 
-Install Fyndata Django Accounts::
+Install FD Django Accounts::
 
     pip install fyndata-django-accounts
 

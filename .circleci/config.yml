@@ -9,11 +9,16 @@
 #   - https://circleci.com/docs/2.0/language-python/ for more details
 #   - https://circleci.com/docs/2.0/configuration-reference/
 #
-version: 2
+version: "2.1"
+
 jobs:
-  test-py37:
+  test:
+    parameters:
+      python_version:
+        type: string
+
     docker:
-      - image: python:3.7.2
+      - image: python:<< parameters.python_version >>
 
       # Service container available at `host: localhost`.
       - image: circleci/postgres:9.6
@@ -41,7 +46,14 @@ jobs:
           command: |
             . venv/bin/activate
             make lint
-            tox -e py37
+
+            # Set Tox environment to the installed Python version.
+            TOXENV=$(
+              python -c 'import sys; v = sys.version_info; print("py{}{}".format(v.major, v.minor))'
+            )
+
+            tox -e "$TOXENV"
+
             codecov
             make test-coverage-report-console
             make test-coverage-report-html
@@ -49,38 +61,6 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
-
-  test-py36:
-    docker:
-      - image: python:3.6.7
-
-      # Service container available at `host: localhost`.
-      - image: circleci/postgres:9.6
-        environment:
-          POSTGRES_USER: django_dev
-          POSTGRES_PASSWORD: django_dev
-          POSTGRES_DB: accounts_dev_test
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-
-      - run:
-          name: install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install --upgrade pip
-            pip install --upgrade setuptools wheel
-            pip install -r requirements_test.txt
-
-      - run:
-          name: run tests
-          command: |
-            . venv/bin/activate
-            make lint
-            tox -e py36
 
   dist:
     docker:
@@ -114,6 +94,12 @@ workflows:
   version: 2
   ci:
     jobs:
-      - test-py37
-      - test-py36
+      - test:
+          matrix:
+            parameters:
+              python_version:
+                - "3.6.7"
+                - "3.7.2"
+                - "3.8.2" # Ubuntu 20.04 LTS
+                - "3.8.3" # Latest version
       - dist
