@@ -5,7 +5,7 @@ from fd_dj_accounts import models
 
 
 def generate_email_address() -> str:
-    return 'user-{}@example.com'.format(time.clock())
+    return 'user-{}@example.com'.format(time.process_time())
 
 
 def create_user(**kwargs: Any) -> models.User:
