@@ -58,7 +58,7 @@ setup(
             'docs',
             'tests*',
         ]),
-    python_requires='>=3.6, <3.8',
+    python_requires='>=3.6, <3.9',
     include_package_data=True,
     package_data=_package_data,
     install_requires=[
@@ -83,5 +83,6 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
 )
