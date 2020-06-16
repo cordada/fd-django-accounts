@@ -21,7 +21,7 @@ jobs:
       - image: python:<< parameters.python_version >>
 
       # Service container available at `host: localhost`.
-      - image: circleci/postgres:9.6
+      - image: circleci/postgres:12.3
         environment:
           POSTGRES_USER: django_dev
           POSTGRES_PASSWORD: django_dev
