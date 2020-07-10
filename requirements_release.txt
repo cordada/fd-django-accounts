@@ -3,4 +3,4 @@
 bumpversion==0.5.3
 setuptools==40.8.0
 twine==1.13.0
-wheel==0.33.1
+wheel==0.34.2
