@@ -42,6 +42,12 @@ jobs:
             pip install -r requirements_test.txt
 
       - run:
+          name: Check Dependencies
+          command: |
+            . venv/bin/activate
+            pip check
+
+      - run:
           name: run tests
           command: |
             . venv/bin/activate
@@ -79,6 +85,12 @@ jobs:
             pip install --upgrade pip
             pip install --upgrade setuptools wheel
             pip install -r requirements_release.txt
+
+      - run:
+          name: Check Dependencies
+          command: |
+            . venv/bin/activate
+            pip check
 
       - run:
           name: make dist
