@@ -3,6 +3,6 @@
 codecov==2.1.7
 coverage==5.2
 flake8==3.7.6
-mypy==0.780
+mypy==0.782
 psycopg2==2.8.5 --no-binary psycopg2
 tox==3.7.0
