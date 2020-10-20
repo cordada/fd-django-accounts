@@ -1,6 +1,6 @@
 -r requirements.txt
 
-codecov==2.1.9
+codecov==2.1.10
 coverage==5.3
 flake8==3.8.4
 mypy==0.790
