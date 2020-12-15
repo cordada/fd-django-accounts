@@ -157,8 +157,7 @@ workflows:
               python_version:
                 - "3.6.12"
                 - "3.7.9"
-                - "3.8.2" # Ubuntu 20.04 LTS
-                - "3.8.3" # Latest version
+                - "3.8.6"
       - dist
       - deploy:
           requires:
