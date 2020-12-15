@@ -155,7 +155,7 @@ workflows:
           matrix:
             parameters:
               python_version:
-                - "3.6.7"
+                - "3.6.12"
                 - "3.7.2"
                 - "3.8.2" # Ubuntu 20.04 LTS
                 - "3.8.3" # Latest version
