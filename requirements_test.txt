@@ -1,7 +1,7 @@
 -r requirements.txt
 
 codecov==2.1.11
-coverage==5.4
+coverage==5.5
 flake8==3.8.4
 mypy==0.800
 psycopg2==2.8.6 --no-binary psycopg2
