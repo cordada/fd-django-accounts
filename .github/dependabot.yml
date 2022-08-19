@@ -10,8 +10,6 @@ updates:
     directory: /
     schedule:
       interval: monthly
-      time: "08:30"
-      timezone: America/Santiago
     open-pull-requests-limit: 3
     labels:
       - dependencies
