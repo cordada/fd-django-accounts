@@ -6,6 +6,35 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.1.4 (2022-08-19)
+++++++++++++++++++
+
+- (PR #44, 2020-09-16) build(deps): bump codecov from 2.1.7 to 2.1.9
+- (PR #42, 2020-09-16) build(deps): bump coverage from 5.2 to 5.3
+- (PR #43, 2020-09-17) build(deps): bump psycopg2 from 2.8.5 to 2.8.6
+- (PR #45, 2020-09-17) build(deps): bump wheel from 0.34.2 to 0.35.1
+- (PR #47, 2020-10-19) build(deps): bump tox from 3.20.0 to 3.20.1
+- (PR #46, 2020-10-19) build(deps): bump flake8 from 3.8.3 to 3.8.4
+- (PR #48, 2020-10-19) build(deps): bump mypy from 0.782 to 0.790
+- (PR #50, 2020-11-12) build(deps): bump codecov from 2.1.9 to 2.1.10
+- (PR #49, 2020-11-12) build(deps): bump setuptools from 50.3.0 to 50.3.2
+- (PR #53, 2020-12-15) build(deps): bump setuptools from 50.3.2 to 51.0.0
+- (PR #54, 2020-12-15) build(deps): bump wheel from 0.35.1 to 0.36.2
+- (PR #55, 2020-12-15) Update Python 3.6, 3.7, and 3.8 versions
+- (PR #56, 2020-12-15) config: Make CI 'dist' job depend on 'test' jobs
+- (PR #58, 2020-12-22) build(deps): bump coverage from 5.3 to 5.3.1
+- (PR #61, 2020-12-30) build(deps): bump twine from 3.2.0 to 3.3.0
+- (PR #57, 2020-12-30) build(deps): bump codecov from 2.1.10 to 2.1.11
+- (PR #73, 2021-02-16) build(deps): bump tox from 3.20.1 to 3.22.0
+- (PR #71, 2021-02-16) build(deps): bump setuptools from 51.0.0 to 53.0.0
+- (PR #69, 2021-02-16) build(deps): bump mypy from 0.790 to 0.800
+- (PR #74, 2021-02-16) build(deps): bump coverage from 5.3.1 to 5.4
+- (PR #88, 2021-10-13) build(deps): bump mypy from 0.800 to 0.910
+- (PR #119, 2022-03-25) build(deps): bump tox from 3.22.0 to 3.24.5
+- (PR #169, 2022-08-18) chore: Change Dependabot schedule interval from `daily` to `monthly`
+- (PR #172, 2022-08-19) feat(management): Add management command `createsuperuser`
+- (PR #171, 2022-08-19) chore: Remove dependabot `time` and `timezone` params
+
 0.1.3 (2020-09-15)
 ++++++++++++++++++
 
