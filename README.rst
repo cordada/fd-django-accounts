@@ -87,7 +87,7 @@ Tests
 
 Requirements::
 
-    pip install -r requirements_test.txt
+    make install-dev
 
 Run test suite for all supported Python versions and run tools for
 code style analysis, static type check, etc::
