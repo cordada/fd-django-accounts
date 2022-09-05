@@ -95,6 +95,10 @@ code style analysis, static type check, etc::
     make test-all
     make lint
 
+(same as above, but with Docker Compose)::
+
+    make docker-compose-run-test
+
 Check code coverage of tests::
 
     make test-coverage
