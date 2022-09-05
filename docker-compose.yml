@@ -1,0 +1,25 @@
+# Docker Compose Base Configuration
+
+# > Understanding multiple Compose files
+# >
+# > By default, Compose reads two files, a `docker-compose.yml` and an optional
+# > `docker-compose.override.yml` file. By convention, the `docker-compose.yml` contains your base
+# > configuration. The override file, as its name implies, can contain configuration overrides for
+# > existing services or entirely new services.
+# >
+# > If a service is defined in both files, Compose merges the configurations using the rules
+# > described in Adding and overriding configuration.
+#
+# Source: https://docs.docker.com/compose/extends/#understanding-multiple-compose-files
+
+version: "3.9"
+
+services:
+  app: &services-app
+    depends_on: []
+    env_file: []
+    environment: []
+    ports: []
+    volumes: []
+
+volumes: {}

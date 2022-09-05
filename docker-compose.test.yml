@@ -1,0 +1,42 @@
+# Docker Compose Configuration for Test Environment
+
+version: "3.9"
+
+services:
+  app: &services-app
+    image: docker.io/library/python:3
+    command: ["make", "install-dev", "lint", "test"]
+    working_dir: /opt/app
+    environment:
+      - DATABASE_HOST=${DATABASE_HOST:-db-test}
+      - DATABASE_NAME=${DATABASE_NAME:-app_test}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD:-123}
+      - DATABASE_PORT=${DATABASE_PORT:-5432}
+      - DATABASE_USERNAME=${DATABASE_USERNAME:-app}
+      - PYTHONBREAKPOINT
+      - PYTHONDONTWRITEBYTECODE=true
+    depends_on:
+      - db-test
+    volumes:
+      - type: bind
+        source: .
+        target: /opt/app
+
+  app-python3.6:
+    <<: *services-app
+    image: docker.io/library/python:3.6.12
+
+  app-python3.7:
+    <<: *services-app
+    image: docker.io/library/python:3.7.9
+
+  app-python3.8:
+    <<: *services-app
+    image: docker.io/library/python:3.8.6
+
+  db-test:
+    image: docker.io/library/postgres:12.3
+    environment:
+      POSTGRES_DB: app_test
+      POSTGRES_PASSWORD: "123"
+      POSTGRES_USER: app
