@@ -22,10 +22,6 @@ services:
         source: .
         target: /opt/app
 
-  app-python3.6:
-    <<: *services-app
-    image: docker.io/library/python:3.6.12
-
   app-python3.7:
     <<: *services-app
     image: docker.io/library/python:3.7.9
