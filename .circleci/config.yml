@@ -55,13 +55,7 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install --upgrade setuptools wheel
-            pip install -r requirements_test.txt
-
-      - run:
-          name: Check Dependencies
-          command: |
-            . venv/bin/activate
-            pip check
+            make install-dev
 
       - run:
           name: run tests
@@ -100,13 +94,7 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install --upgrade setuptools wheel
-            pip install -r requirements_release.txt
-
-      - run:
-          name: Check Dependencies
-          command: |
-            . venv/bin/activate
-            pip check
+            make install-dev
 
       - run:
           name: make dist
@@ -155,7 +143,6 @@ workflows:
           matrix:
             parameters:
               python_version:
-                - "3.6.12"
                 - "3.7.9"
                 - "3.8.6"
       - dist:

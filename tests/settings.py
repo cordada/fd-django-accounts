@@ -1,3 +1,5 @@
+import os
+
 import django  # noqa: F401
 
 DEBUG = False
@@ -10,11 +12,11 @@ SECRET_KEY = "^e8thszumk=vywe=-9!6aizo^+h*rf2v8$88*_*@^194&-^3)n"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'localhost',
-        'PORT': 5432,
-        'NAME': 'accounts_dev',
-        'USER': 'django_dev',
-        'PASSWORD': 'django_dev',
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+        'PORT': int(os.getenv('DATABASE_PORT', '5432')),
+        'NAME': os.getenv('DATABASE_NAME', 'accounts_dev'),
+        'USER': os.getenv('DATABASE_USERNAME', 'django_dev'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'django_dev'),
         'ATOMIC_REQUESTS': False,
         'AUTOCOMMIT': True,
     }

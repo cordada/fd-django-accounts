@@ -87,13 +87,17 @@ Tests
 
 Requirements::
 
-    pip install -r requirements_test.txt
+    make install-dev
 
 Run test suite for all supported Python versions and run tools for
 code style analysis, static type check, etc::
 
     make test-all
     make lint
+
+(same as above, but with Docker Compose)::
+
+    make docker-compose-run-test
 
 Check code coverage of tests::
 

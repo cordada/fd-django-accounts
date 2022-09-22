@@ -6,6 +6,22 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.2.0 (2022-09-22)
+++++++++++++++++++
+
+- (PR #174, 2022-08-19) chore(management): Improve management command `createsuperuser`
+- (PR #176, 2022-08-29) chore: Add Make tasks for installation
+- (PR #138, 2022-08-31) build(deps): bump wheel from 0.36.2 to 0.37.1
+- (PR #178, 2022-09-05) Add testing with Docker Compose
+- (PR #177, 2022-09-05) build(deps): bump tox from 3.24.5 to 3.25.1
+- (PR #179, 2022-09-06) chore: Drop support for Python 3.6
+- (PR #167, 2022-09-06) chore(deps): bump coverage from 5.4 to 6.4.4
+- (PR #180, 2022-09-06) build(deps): bump mypy from 0.910 to 0.971
+- (PR #175, 2022-09-08) chore(deps): bump setuptools from 53.0.0 to 65.3.0
+- (PR #182, 2022-09-22) build(deps): bump twine from 3.3.0 to 4.0.1
+- (PR #181, 2022-09-22) chore(deps): bump psycopg2 from 2.8.6 to 2.9.3
+- (PR #183, 2022-09-22) chore(deps): bump tox from 3.25.1 to 3.26.0
+
 0.1.4 (2022-08-19)
 ++++++++++++++++++
 
