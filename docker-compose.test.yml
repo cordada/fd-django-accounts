@@ -30,6 +30,10 @@ services:
     <<: *services-app
     image: docker.io/library/python:3.8.6
 
+  app-python3.9:
+    <<: *services-app
+    image: docker.io/library/python:3.9.15
+
   db-test:
     image: docker.io/library/postgres:12.3
     environment:
