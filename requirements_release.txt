@@ -4,3 +4,7 @@ bumpversion==0.5.3
 setuptools==65.3.0
 twine==4.0.1
 wheel==0.37.1
+
+importlib-metadata==4.13.0 ; python_version < "3.8"
+    # via
+    #   twine
