@@ -6,6 +6,12 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.3.0 (2022-11-11)
+++++++++++++++++++
+
+- (PR #191, 2022-11-10) fix(requirements): Pin importlib-metadata dependency for python 3.7
+- (PR #190, 2022-11-11) feat: Add Python 3.9 support
+
 0.2.0 (2022-09-22)
 ++++++++++++++++++
 
