@@ -2,6 +2,11 @@ from django.apps import AppConfig
 from django.conf import settings
 import django.core.exceptions
 import django.core.validators
+from django.contrib.auth import get_user_model
+from django.contrib.auth.checks import check_user_model
+from django.contrib.auth.signals import user_logged_in
+from django.core import checks
+from django.db.models.query_utils import DeferredAttribute
 
 
 class AccountsAppConfig(AppConfig):
@@ -13,6 +18,20 @@ class AccountsAppConfig(AppConfig):
 
     def ready(self) -> None:
         _validate_app_settings()
+
+        #######################################################################
+        # note: this code block is a partial copy of 'django.contrib.auth.apps.AuthConfig.ready()'.
+        last_login_field = getattr(get_user_model(), 'last_login', None)
+
+        # Register the handler only if UserModel.last_login is a field.
+        if isinstance(last_login_field, DeferredAttribute):
+            from .models import update_last_login
+            from .auth_backends import AbstractBaseUser
+            assert issubclass(get_user_model(), AbstractBaseUser)
+            user_logged_in.connect(update_last_login, dispatch_uid='update_last_login')
+        #######################################################################
+
+        checks.register(check_user_model, checks.Tags.models)
 
 
 def _validate_app_settings() -> None:

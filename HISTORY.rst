@@ -6,6 +6,12 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.4.0 (2023-01-05)
+++++++++++++++++++
+
+- (PR #197, 2022-12-20) chore: Update `last_login` field on User model
+- (PR #199, 2023-01-04) chore: Add support for Python 3.10
+
 0.3.0 (2022-11-11)
 ++++++++++++++++++
 

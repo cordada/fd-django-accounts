@@ -80,7 +80,7 @@ jobs:
 
   dist:
     docker:
-      - image: python:3.7.2
+      - image: python:3.10.9
 
     working_directory: ~/repo
 
@@ -114,7 +114,7 @@ jobs:
 
   deploy:
     docker:
-      - image: python:3.7.2
+      - image: python:3.10.9
         environment:
           <<: *x-deploy-environment
 
@@ -146,6 +146,7 @@ workflows:
                 - "3.7.9"
                 - "3.8.6"
                 - "3.9.15"
+                - "3.10.9"
       - dist:
           requires:
             - test
