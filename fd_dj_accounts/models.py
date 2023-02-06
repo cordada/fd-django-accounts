@@ -2,7 +2,7 @@
 Concrete models.
 
 """
-from typing import Any  # noqa: F401
+from typing import Any, Optional  # noqa: F401
 import uuid
 
 from django.conf import settings
@@ -79,7 +79,12 @@ class UserManager(base_models.UserManager):
 
     use_in_migrations = False
 
-    def _create_user(self, email_address: str, password: str = None, **extra_fields: Any) -> 'User':
+    def _create_user(
+        self,
+        email_address: str,
+        password: Optional[str] = None,
+        **extra_fields: Any,
+    ) -> 'User':
         """
         Customization.
 

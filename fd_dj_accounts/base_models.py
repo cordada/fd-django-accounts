@@ -6,7 +6,7 @@ This module allows importing :class:`BaseUser`, :class:`UserManager` and
 ``INSTALLED_APPS`` (analogous to :mod:`django.contrib.auth.base_user`).
 
 """
-from typing import Any, List, Tuple, Type  # noqa: F401
+from typing import Any, List, Optional, Tuple, Type  # noqa: F401
 
 import django.contrib.auth.base_user
 from django.db import models
@@ -31,7 +31,7 @@ class UserManager(django.contrib.auth.base_user.BaseUserManager):
     use_in_migrations = False
 
     def _create_user(
-        self, email_address: str, password: str = None,
+        self, email_address: str, password: Optional[str] = None,
         **extra_fields: Any,
     ) -> 'BaseUser':
         """
@@ -50,7 +50,7 @@ class UserManager(django.contrib.auth.base_user.BaseUserManager):
         return user
 
     def create_user(
-        self, email_address: str, password: str = None,
+        self, email_address: str, password: Optional[str] = None,
         **extra_fields: Any,
     ) -> 'BaseUser':
         """
