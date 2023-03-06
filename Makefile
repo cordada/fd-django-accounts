@@ -2,6 +2,8 @@ SHELL = /usr/bin/env bash
 
 # Python
 PYTHON = python3
+PYTHON_PIP = $(PYTHON) -m pip
+PYTHON_PIP_VERSION_SPECIFIER = ==22.3.1
 PYTHON_VIRTUALENV_DIR = venv
 
 .DEFAULT_GOAL := help
@@ -12,6 +14,7 @@ PYTHON_VIRTUALENV_DIR = venv
 .PHONY: docs dist upload-release
 .PHONY: docker-compose-run-test
 .PHONY: python-virtualenv
+.PHONY: python-pip-install
 
 help:
 	@grep '^[a-zA-Z]' $(MAKEFILE_LIST) | sort | awk -F ':.*?## ' 'NF==2 {printf "\033[36m  %-25s\033[0m %s\n", $$1, $$2}'
@@ -47,6 +50,7 @@ install-dev: ## Install for development
 	python -m pip install --editable .
 	python -m pip check
 
+install-deps-dev: python-pip-install
 install-deps-dev: ## Install dependencies for development
 	python -m pip install -r requirements.txt
 	python -m pip check
@@ -94,6 +98,9 @@ upload-release: ## upload dist packages
 
 python-virtualenv: ## Create virtual Python environment
 	$(PYTHON) -m venv "$(PYTHON_VIRTUALENV_DIR)"
+
+python-pip-install: ## Install Pip
+	$(PYTHON_PIP) install 'pip$(PYTHON_PIP_VERSION_SPECIFIER)'
 
 docker-compose-run-test: export COMPOSE_FILE = docker-compose.yml:docker-compose.test.yml
 docker-compose-run-test:  ## Run tests with Docker Compose
