@@ -1,5 +1,9 @@
 SHELL = /usr/bin/env bash
 
+# Python
+PYTHON = python3
+PYTHON_VIRTUALENV_DIR = venv
+
 .DEFAULT_GOAL := help
 .PHONY: help
 .PHONY: clean clean-build clean-pyc clean-test
@@ -7,6 +11,7 @@ SHELL = /usr/bin/env bash
 .PHONY: lint test test-all test-coverage test-coverage-report-console test-coverage-report-html
 .PHONY: docs dist upload-release
 .PHONY: docker-compose-run-test
+.PHONY: python-virtualenv
 
 help:
 	@grep '^[a-zA-Z]' $(MAKEFILE_LIST) | sort | awk -F ':.*?## ' 'NF==2 {printf "\033[36m  %-25s\033[0m %s\n", $$1, $$2}'
@@ -86,6 +91,9 @@ dist: clean ## builds source and wheel package
 
 upload-release: ## upload dist packages
 	python -m twine upload 'dist/*'
+
+python-virtualenv: ## Create virtual Python environment
+	$(PYTHON) -m venv "$(PYTHON_VIRTUALENV_DIR)"
 
 docker-compose-run-test: export COMPOSE_FILE = docker-compose.yml:docker-compose.test.yml
 docker-compose-run-test:  ## Run tests with Docker Compose
