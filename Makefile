@@ -6,6 +6,9 @@ PYTHON_PIP = $(PYTHON) -m pip
 PYTHON_PIP_VERSION_SPECIFIER = ==22.3.1
 PYTHON_VIRTUALENV_DIR = venv
 
+# Tox
+TOXENV ?= py310
+
 .DEFAULT_GOAL := help
 .PHONY: help
 .PHONY: clean clean-build clean-pyc clean-test
@@ -65,8 +68,8 @@ lint: ## run tools for code style analysis, static type check, etc
 	flake8  --config=setup.cfg  fd_dj_accounts  tests
 	mypy  --config-file setup.cfg  fd_dj_accounts
 
-test: ## run tests quickly with the default Python
-	python runtests.py tests
+test: ## run tests quickly with the default Tox Python
+	tox -e "$(TOXENV)"
 
 test-all: ## run tests on every Python version with tox
 	tox
