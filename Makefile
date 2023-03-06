@@ -11,7 +11,7 @@ PYTHON_VIRTUALENV_DIR = venv
 .PHONY: clean clean-build clean-pyc clean-test
 .PHONY: install-dev install-deps-dev
 .PHONY: lint test test-all test-coverage test-coverage-report-console test-coverage-report-html
-.PHONY: docs dist upload-release
+.PHONY: docs build dist upload-release
 .PHONY: docker-compose-run-test
 .PHONY: python-virtualenv
 .PHONY: python-pip-install
@@ -87,7 +87,10 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
-dist: clean ## builds source and wheel package
+build: ## Build Python package
+	$(PYTHON) setup.py build
+
+dist: build ## builds source and wheel package
 	python setup.py sdist
 	python setup.py bdist_wheel
 	twine check dist/*
