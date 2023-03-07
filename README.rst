@@ -24,8 +24,8 @@ The full documentation is at https://fyndata-django-accounts.readthedocs.io.
 Status
 -------------
 
-.. image:: https://circleci.com/gh/fyntex/fd-django-accounts/tree/develop.svg?style=shield
-    :target: https://circleci.com/gh/fyntex/fd-django-accounts/tree/develop
+.. image:: https://github.com/fyntex/fd-django-accounts/actions/workflows/ci-cd.yaml/badge.svg?branch=develop
+    :target: https://github.com/fyntex/fd-django-accounts/actions/workflows/ci-cd.yaml?query=branch:develop
     :alt: CI status
 
 .. image:: https://codecov.io/gh/fyntex/fd-django-accounts/branch/develop/graph/badge.svg

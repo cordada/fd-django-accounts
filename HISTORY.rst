@@ -6,6 +6,17 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.5.0 (2023-03-07)
+++++++++++++++++++
+
+- (PR #204, 2023-01-26) Add GitHub Dependency Review
+- (PR #206, 2023-02-06) chore(deps): bump coverage from 6.4.4 to 7.1.0
+- (PR #195, 2023-02-06) chore(deps): bump mypy from 0.971 to 0.991
+- (PR #201, 2023-02-06) chore(deps): bump wheel from 0.37.1 to 0.38.4
+- (PR #207, 2023-02-06) chore(deps): bump setuptools from 65.3.0 to 67.1.0
+- (PR #212, 2023-03-07) Switch CI/CD to GitHub actions
+- (PR #215, 2023-03-07) chore(deps): bump mypy from 0.991 to 1.1.1
+
 0.4.0 (2023-01-05)
 ++++++++++++++++++
 

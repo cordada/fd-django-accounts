@@ -121,7 +121,7 @@ class AuthUserModelAuthBackend(AbstractAuthBackend):
         self,
         request: Optional[HttpRequest],
         username: Any = None,
-        password: str = None,
+        password: Optional[str] = None,
         **kwargs: Any,
     ) -> Optional[AbstractBaseUser]:
         # TODO: raise an error if neither arg 'username' nor an arg named as the auth user model
