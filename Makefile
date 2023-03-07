@@ -1,12 +1,24 @@
 SHELL = /usr/bin/env bash
 
+# Python
+PYTHON = python3
+PYTHON_PIP = $(PYTHON) -m pip
+PYTHON_PIP_VERSION_SPECIFIER = ==22.3.1
+PYTHON_VIRTUALENV_DIR = venv
+
+# Tox
+TOXENV ?= py310
+
 .DEFAULT_GOAL := help
 .PHONY: help
 .PHONY: clean clean-build clean-pyc clean-test
 .PHONY: install-dev install-deps-dev
-.PHONY: lint test test-all test-coverage test-coverage-report-console test-coverage-report-html
-.PHONY: docs dist upload-release
+.PHONY: lint test test-all test-coverage
+.PHONY: test-coverage-report test-coverage-report-console test-coverage-report-html
+.PHONY: docs build dist deploy upload-release
 .PHONY: docker-compose-run-test
+.PHONY: python-virtualenv
+.PHONY: python-pip-install
 
 help:
 	@grep '^[a-zA-Z]' $(MAKEFILE_LIST) | sort | awk -F ':.*?## ' 'NF==2 {printf "\033[36m  %-25s\033[0m %s\n", $$1, $$2}'
@@ -42,6 +54,7 @@ install-dev: ## Install for development
 	python -m pip install --editable .
 	python -m pip check
 
+install-deps-dev: python-pip-install
 install-deps-dev: ## Install dependencies for development
 	python -m pip install -r requirements.txt
 	python -m pip check
@@ -56,14 +69,18 @@ lint: ## run tools for code style analysis, static type check, etc
 	flake8  --config=setup.cfg  fd_dj_accounts  tests
 	mypy  --config-file setup.cfg  fd_dj_accounts
 
-test: ## run tests quickly with the default Python
-	python runtests.py tests
+test: ## run tests quickly with the default Tox Python
+	tox -e "$(TOXENV)"
 
 test-all: ## run tests on every Python version with tox
 	tox
 
 test-coverage: ## run tests and record test coverage
 	coverage run --rcfile=setup.cfg runtests.py tests
+
+test-coverage-report: test-coverage-report-console
+test-coverage-report: test-coverage-report-html
+test-coverage-report: ## Run tests, measure code coverage, and generate reports
 
 test-coverage-report-console: ## print test coverage summary
 	coverage report --rcfile=setup.cfg -m
@@ -78,7 +95,10 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
-dist: clean ## builds source and wheel package
+build: ## Build Python package
+	$(PYTHON) setup.py build
+
+dist: build ## builds source and wheel package
 	python setup.py sdist
 	python setup.py bdist_wheel
 	twine check dist/*
@@ -86,6 +106,15 @@ dist: clean ## builds source and wheel package
 
 upload-release: ## upload dist packages
 	python -m twine upload 'dist/*'
+
+deploy: upload-release
+deploy: ## Deploy or publish
+
+python-virtualenv: ## Create virtual Python environment
+	$(PYTHON) -m venv "$(PYTHON_VIRTUALENV_DIR)"
+
+python-pip-install: ## Install Pip
+	$(PYTHON_PIP) install 'pip$(PYTHON_PIP_VERSION_SPECIFIER)'
 
 docker-compose-run-test: export COMPOSE_FILE = docker-compose.yml:docker-compose.test.yml
 docker-compose-run-test:  ## Run tests with Docker Compose
