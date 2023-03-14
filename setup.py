@@ -58,7 +58,7 @@ setup(
             'docs',
             'tests*',
         ]),
-    python_requires='>=3.7, <3.11',
+    python_requires='>=3.8, <3.11',
     include_package_data=True,
     package_data=_package_data,
     install_requires=[
@@ -81,7 +81,6 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',

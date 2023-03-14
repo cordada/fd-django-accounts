@@ -6,6 +6,14 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.6.0 (2023-03-14)
+++++++++++++++++++
+
+- (PR #218, 2023-03-08) Drop support for Python 3.7
+- (PR #209, 2023-03-14) chore(deps): bump coverage from 7.1.0 to 7.2.1
+- (PR #219, 2023-03-14) chore(deps): bump setuptools from 67.1.0 to 67.6.0
+- (PR #220, 2023-03-14) chore: bump actions/cache from 3.2.5 to 3.3.1
+
 0.5.0 (2023-03-07)
 ++++++++++++++++++
 
