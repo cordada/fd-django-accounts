@@ -45,7 +45,7 @@ jobs:
         run: make python-virtualenv PYTHON_VIRTUALENV_DIR="venv"
 
       - name: Restoring/Saving Cache
-        uses: actions/cache@v3.2.5
+        uses: actions/cache@v3.3.1
         with:
           path: "venv"
           key: py-v1-deps-${{ runner.os }}-${{ matrix.python_version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_test.txt') }}-${{ hashFiles('requirements_release.txt') }}-${{ hashFiles('Makefile', 'make/**.mk') }}
@@ -101,7 +101,7 @@ jobs:
           python-version: "${{ matrix.python_version }}"
 
       - name: Restoring/Saving Cache
-        uses: actions/cache@v3.2.5
+        uses: actions/cache@v3.3.1
         with:
           path: "venv"
           key: py-v1-deps-${{ runner.os }}-${{ matrix.python_version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_test.txt') }}-${{ hashFiles('requirements_release.txt') }}-${{ hashFiles('Makefile', 'make/**.mk') }}
