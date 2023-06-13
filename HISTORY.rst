@@ -6,6 +6,14 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.6.1 (2023-06-09)
+++++++++++++++++++
+
+- (PR #228, 2023-04-04) Add Git commit linter
+- (PR #225, 2023-04-05) Bump wheel from 0.38.4 to 0.40.0
+- (PR #227, 2023-05-23) chore(deps): Bump actions/dependency-review-action from 3.0.3 to 3.0.4
+- (PR #234, 2023-06-05) Add Codecov to CI workflow
+
 0.6.0 (2023-03-14)
 ++++++++++++++++++
 
