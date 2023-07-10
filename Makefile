@@ -122,6 +122,6 @@ python-pip-install: ## Install Pip
 
 docker-compose-run-test: export COMPOSE_FILE = docker-compose.yml:docker-compose.test.yml
 docker-compose-run-test:  ## Run tests with Docker Compose
-	docker-compose run --rm -- app-python3.8
-	docker-compose run --rm -- app-python3.9
-	docker-compose run --rm -- app-python3.10
+	docker compose run --rm -- app-python3.8
+	docker compose run --rm -- app-python3.9
+	docker compose run --rm -- app-python3.10
