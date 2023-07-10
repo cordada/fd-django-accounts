@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from django.test import SimpleTestCase, TestCase
 
 from fd_dj_accounts.models import AnonymousUser, User, UserManager, get_or_create_system_user
@@ -82,6 +84,19 @@ class UserManagerTestCase(TestCase):
 
 
 class UserTestCase(TestCase):
+
+    def test_repr(self) -> None:
+        user = User(
+            id=UUID('12caf218-0001-45d4-b4df-44ff87f19989'),
+            email_address='user@example.com',
+        )
+        self.assertEqual(
+            repr(user),
+            "<User("
+            "id=UUID('12caf218-0001-45d4-b4df-44ff87f19989'),"
+            " email_address='user@example.com'"
+            ")>"
+        )
 
     def test_model_manager(self):  # type: ignore
         self.assertIsInstance(User.objects, UserManager)

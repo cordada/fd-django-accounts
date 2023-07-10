@@ -118,6 +118,7 @@ class User(base_models.BaseUser):
     - Override :meth:`save` to make sure full validation is performed before
       each and every save (including creation).
     - Custom model manager.
+    - Custom :meth:`__repr__` that includes the user’s ``id`` in addition to the username.
 
     .. seealso:: :class:`AnonymousUser`.
 
@@ -145,6 +146,16 @@ class User(base_models.BaseUser):
 
         verbose_name = 'user'
         verbose_name_plural = 'users'
+
+    def __repr__(self) -> str:
+        # fmt: off
+        return (
+            f"<{self.__class__.__name__}("
+            f"id={self.id!r},"
+            f" {self.USERNAME_FIELD}={self.get_username()!r}"
+            f")>"
+        )
+        # fmt: on
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Call :meth:`full_clean` before saving."""
