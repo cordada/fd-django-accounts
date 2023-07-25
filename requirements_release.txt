@@ -2,5 +2,5 @@
 
 bumpversion==0.5.3
 setuptools==68.0.0
-twine==4.0.1
+twine==4.0.2
 wheel==0.40.0
