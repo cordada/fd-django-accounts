@@ -34,10 +34,10 @@ jobs:
 
     steps:
       - name: Check Out VCS Repository
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v3.5.3
 
       - name: Set Up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v4.5.0
+        uses: actions/setup-python@v4.7.0
         with:
           python-version: "${{ matrix.python_version }}"
 
@@ -93,10 +93,10 @@ jobs:
 
     steps:
       - name: Check Out VCS Repository
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v3.5.3
 
       - name: Set Up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v4.5.0
+        uses: actions/setup-python@v4.7.0
         with:
           python-version: "${{ matrix.python_version }}"
 
@@ -138,7 +138,7 @@ jobs:
           make test-coverage-report
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3.1.2
+        uses: codecov/codecov-action@v3.1.4
         with:
           directory: ./test-reports/coverage/
           fail_ci_if_error: true
