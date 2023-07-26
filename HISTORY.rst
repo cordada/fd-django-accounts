@@ -6,6 +6,21 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.7.0 (2023-06-09)
+++++++++++++++++++
+
+- (PR #242, 2023-07-10) Add improved `__repr__()` to `User` model
+- (PR #243, 2023-07-10) Fix broken Make task `docker-compose-run-test`
+- (PR #241, 2023-07-10) chore: Bump codecov/codecov-action from 3.1.2 to 3.1.4
+- (PR #244, 2023-07-14) chore: Bump actions/setup-python from 4.5.0 to 4.7.0
+- (PR #231, 2023-07-14) chore(deps): Bump flake8 from 3.8.4 to 6.0.0
+- (PR #240, 2023-07-14) chore: Bump actions/checkout from 3.3.0 to 3.5.3
+- (PR #237, 2023-07-14) chore: Bump actions/dependency-review-action from 3.0.4 to 3.0.6
+- (PR #235, 2023-07-14) chore(deps): Bump coverage from 7.2.1 to 7.2.7
+- (PR #247, 2023-07-25) chore(deps): Bump mypy from 1.1.1 to 1.4.1
+- (PR #246, 2023-07-25) chore(deps): Bump setuptools from 67.6.0 to 68.0.0
+- (PR #245, 2023-07-25) chore(deps): Bump twine from 4.0.1 to 4.0.2
+
 0.6.1 (2023-06-09)
 ++++++++++++++++++
 
