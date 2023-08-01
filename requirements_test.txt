@@ -3,5 +3,5 @@
 coverage==7.2.7
 flake8==6.0.0
 mypy==1.4.1
-psycopg2==2.9.3 --no-binary psycopg2
+psycopg2==2.9.6 --no-binary psycopg2
 tox==3.26.0
