@@ -28,8 +28,8 @@ Status
     :target: https://github.com/fyntex/fd-django-accounts/actions/workflows/ci-cd.yaml?query=branch:develop
     :alt: CI status
 
-.. image:: https://codecov.io/gh/fyntex/fd-django-accounts/branch/develop/graph/badge.svg
-    :target: https://codecov.io/gh/fyntex/fd-django-accounts
+.. image:: https://codecov.io/gh/cordada/fd-django-accounts/graph/badge.svg?token=XL0EeyLbL3
+    :target: https://codecov.io/gh/cordada/fd-django-accounts
     :alt: Code coverage
 
 .. image:: https://api.codeclimate.com/v1/badges/30ac22150dbf8549b989/maintainability
