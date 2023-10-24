@@ -6,6 +6,18 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.8.0 (2023-10-23)
+++++++++++++++++++
+
+- (PR #258, 2023-09-07) Add Codecov repository upload token; update Codecov status badge
+- (PR #261, 2023-09-27) Add dependency groups to Dependabot configuration
+- (PR #264, 2023-09-27) Allow GitHub Actions to pass secrets from CI/CD to CI workflow
+- (PR #262, 2023-09-27) chore: Bump the production-dependencies group with 4 updates
+- (PR #266, 2023-10-17) Add missing tests for `commands.createsuperuser`
+- (PR #263, 2023-10-23) chore(deps): Bump tox from 3.26.0 to 4.11.3
+- (PR #253, 2023-10-23) chore(deps): Bump wheel from 0.40.0 to 0.41.2
+- (PR #267, 2023-10-23) chore(deps): Bump psycopg2 from 2.9.3 to 2.9.9
+
 0.7.0 (2023-06-09)
 ++++++++++++++++++
 
