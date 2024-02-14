@@ -7,7 +7,7 @@ from setuptools import find_packages, setup
 
 
 def get_version(*file_paths):
-    """Retrieves the version from fd_dj_accounts/__init__.py"""
+    """Retrieves the version from src/fd_dj_accounts/__init__.py"""
     filename = os.path.join(os.path.dirname(__file__), *file_paths)
     version_file = open(filename).read()
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
@@ -17,7 +17,7 @@ def get_version(*file_paths):
     raise RuntimeError('Unable to find version string.')
 
 
-version = get_version("fd_dj_accounts", "__init__.py")
+version = get_version("src", "fd_dj_accounts", "__init__.py")
 
 
 if sys.argv[-1] == 'tag':
@@ -53,9 +53,10 @@ setup(
     author='Fyndata (Fynpal SpA)',
     author_email='no-reply@fyndata.com',
     url='https://github.com/fyndata/fyndata-django-accounts',
+    package_dir={'': 'src'},
     packages=find_packages(
+        where='src',
         exclude=[
-            'docs',
             'tests*',
         ]),
     python_requires='>=3.8, <3.11',

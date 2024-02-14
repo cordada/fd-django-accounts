@@ -3,5 +3,5 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
-recursive-include fd_dj_accounts *py
-include fd_dj_accounts/py.typed
+recursive-include src/fd_dj_accounts *py
+include src/fd_dj_accounts/py.typed
