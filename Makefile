@@ -1,5 +1,8 @@
 SHELL = /usr/bin/env bash
 
+# Sources Root
+SOURCES_ROOT = $(CURDIR)/src
+
 # Python
 PYTHON = python3
 PYTHON_PIP = $(PYTHON) -m pip
@@ -65,9 +68,10 @@ install-deps-dev: ## Install dependencies for development
 	python -m pip install -r requirements_release.txt
 	python -m pip check
 
+lint: FLAKE8_FILES = *.py "$(SOURCES_ROOT)"
 lint: ## run tools for code style analysis, static type check, etc
-	flake8  --config=setup.cfg  fd_dj_accounts  tests
-	mypy  --config-file setup.cfg  fd_dj_accounts
+	flake8  --config=setup.cfg  $(FLAKE8_FILES)
+	mypy  --config-file setup.cfg
 
 test: ## run tests quickly with the default Tox Python
 	tox -e "$(TOXENV)"
@@ -95,7 +99,7 @@ test-coverage-report-html: ## generate test coverage HTML report
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/fd_dj_accounts.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ fd_dj_accounts
+	sphinx-apidoc -o docs/ "$(SOURCES_ROOT)/fd_dj_accounts"
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
