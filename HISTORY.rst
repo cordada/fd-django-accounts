@@ -6,6 +6,18 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.9.0 (2024-02-26)
+++++++++++++++++++
+
+- (PR #279, 2024-01-10) chore(deps): Bump mypy from 1.4.1 to 1.8.0
+- (PR #281, 2024-01-29) chore: Bump the production-dependencies group with 7 updates
+- (PR #284, 2024-02-13) Change Python project structure from Flat layout to Src layout
+- (PR #285, 2024-02-13) chore: Bump the production-dependencies group with 3 updates
+- (PR #286, 2024-02-14) Add Python project configuration
+- (PR #275, 2024-02-15) chore(deps): Bump wheel from 0.41.2 to 0.42.0
+- (PR #282, 2024-02-16) chore: Bump coverage from 7.2.7 to 7.4.1
+- (PR #287, 2024-02-16) chore: Bump setuptools from 68.0.0 to 69.1.0
+
 0.8.0 (2023-10-23)
 ++++++++++++++++++
 
