@@ -2,7 +2,10 @@
 Concrete models.
 
 """
-from typing import Any, Optional  # noqa: F401
+
+from __future__ import annotations
+
+from typing import Any, Optional
 import uuid
 
 from django.conf import settings
@@ -30,7 +33,7 @@ def update_last_login(sender: Any, user: AbstractBaseUser, **kwargs: Any) -> Non
     user.save(update_fields=['last_login'])
 
 
-def get_or_create_system_user() -> 'User':
+def get_or_create_system_user() -> User:
     """Return the "system user", which is created by itself.
 
     The system user is created, by default:
@@ -44,7 +47,7 @@ def get_or_create_system_user() -> 'User':
     """
     system_user_email_address = settings.APP_ACCOUNTS_SYSTEM_USERNAME
     try:
-        system_user = User.objects.get(email_address=system_user_email_address)  # type: User
+        system_user: User = User.objects.get(email_address=system_user_email_address)
     except User.DoesNotExist:
         system_user_uuid = uuid.uuid4()
         system_user = User(
@@ -59,9 +62,7 @@ def get_or_create_system_user() -> 'User':
         # Before calling 'save()' we call the parent class' implementation as a trick to skip
         #   validating field 'created_by' because it is a self reference. This only makes sense
         #   when creating a system user.
-        # note: skip mypy check because it yields 'error: "super" used outside class'.
-        #   See: https://github.com/python/mypy/issues/1167
-        super(User, system_user).save()  # type: ignore
+        super(User, system_user).save()
         system_user.save()
 
     return system_user
@@ -95,7 +96,7 @@ class UserManager(base_models.UserManager):
         if not email_address:
             raise ValueError('The given email address must be set')
         email_address = self.normalize_email(email_address)
-        user = self.model(email_address=email_address, **extra_fields)  # type: User
+        user: User = self.model(email_address=email_address, **extra_fields)
         user.set_password(password)
 
         # warning: we can not just access foreign key field 'created_by' because if it has not

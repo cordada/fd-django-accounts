@@ -33,6 +33,9 @@ Notes:
 TODO: submit the module's code to the Django project.
 
 """
+
+from __future__ import annotations
+
 from typing import Any, Optional
 
 from django.contrib.auth import get_user_model
@@ -120,7 +123,7 @@ class AuthUserModelAuthBackend(AbstractAuthBackend):
     def authenticate(
         self,
         request: Optional[HttpRequest],
-        username: Any = None,
+        username: Optional[str] = None,
         password: Optional[str] = None,
         **kwargs: Any,
     ) -> Optional[AbstractBaseUser]:
