@@ -34,10 +34,10 @@ jobs:
 
     steps:
       - name: Check Out VCS Repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
 
       - name: Set Up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v5.0.0
+        uses: actions/setup-python@v5.3.0
         with:
           python-version: "${{ matrix.python_version }}"
 
@@ -45,7 +45,7 @@ jobs:
         run: make python-virtualenv PYTHON_VIRTUALENV_DIR="venv"
 
       - name: Restoring/Saving Cache
-        uses: actions/cache@v4.0.0
+        uses: actions/cache@v4.1.2
         with:
           path: "venv"
           key: py-v1-deps-${{ runner.os }}-${{ matrix.python_version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_test.txt') }}-${{ hashFiles('requirements_release.txt') }}-${{ hashFiles('Makefile', 'make/**.mk') }}
@@ -93,15 +93,15 @@ jobs:
 
     steps:
       - name: Check Out VCS Repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
 
       - name: Set Up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v5.0.0
+        uses: actions/setup-python@v5.3.0
         with:
           python-version: "${{ matrix.python_version }}"
 
       - name: Restoring/Saving Cache
-        uses: actions/cache@v4.0.0
+        uses: actions/cache@v4.1.2
         with:
           path: "venv"
           key: py-v1-deps-${{ runner.os }}-${{ matrix.python_version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_test.txt') }}-${{ hashFiles('requirements_release.txt') }}-${{ hashFiles('Makefile', 'make/**.mk') }}
@@ -138,7 +138,7 @@ jobs:
           make test-coverage-report
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
+        uses: codecov/codecov-action@v5.0.6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./test-reports/coverage/
@@ -146,7 +146,7 @@ jobs:
 
       - name: Store Artifacts
         if: ${{ always() }}
-        uses: actions/upload-artifact@v4.3.1
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: test_reports_${{ matrix.python_version }}
           path: test-reports/
