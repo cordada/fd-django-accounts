@@ -6,7 +6,10 @@ This module allows importing :class:`BaseUser`, :class:`UserManager` and
 ``INSTALLED_APPS`` (analogous to :mod:`django.contrib.auth.base_user`).
 
 """
-from typing import Any, List, Optional, Tuple, Type  # noqa: F401
+
+from __future__ import annotations
+
+from typing import Any, List, Optional, Tuple, Type
 
 import django.contrib.auth.base_user
 from django.db import models
@@ -33,7 +36,7 @@ class UserManager(django.contrib.auth.base_user.BaseUserManager):
     def _create_user(
         self, email_address: str, password: Optional[str] = None,
         **extra_fields: Any,
-    ) -> 'BaseUser':
+    ) -> BaseUser:
         """
         Create and save a user with the given email address and password.
 
@@ -43,7 +46,7 @@ class UserManager(django.contrib.auth.base_user.BaseUserManager):
         if not email_address:
             raise ValueError('The given email address must be set')
         email_address = self.normalize_email(email_address)
-        user = self.model(email_address=email_address, **extra_fields)  # type: BaseUser
+        user: BaseUser = self.model(email_address=email_address, **extra_fields)
         user.set_password(password)
 
         user.save(using=self._db)
@@ -52,7 +55,7 @@ class UserManager(django.contrib.auth.base_user.BaseUserManager):
     def create_user(
         self, email_address: str, password: Optional[str] = None,
         **extra_fields: Any,
-    ) -> 'BaseUser':
+    ) -> BaseUser:
         """
         Create and save a user with the given email address and password.
 
@@ -66,7 +69,7 @@ class UserManager(django.contrib.auth.base_user.BaseUserManager):
     def create_superuser(
         self, email_address: str, password: str,
         **extra_fields: Any,
-    ) -> 'BaseUser':
+    ) -> BaseUser:
         """
         Create and save a superuser with the given email address and password.
 
@@ -119,7 +122,7 @@ class BaseUser(django.contrib.auth.base_user.AbstractBaseUser):
     # note: "'REQUIRED_FIELDS' must contain all required fields on your user model, but should not
     #   contain the 'USERNAME_FIELD' or 'password' as these fields will always be prompted for."
     # required
-    REQUIRED_FIELDS = []  # type: List[str]
+    REQUIRED_FIELDS: List[str] = []
 
     email_address = models.EmailField(
         unique=True,
@@ -168,7 +171,7 @@ class BaseUser(django.contrib.auth.base_user.AbstractBaseUser):
         # note: the username normalization is performed in
         #   'django.contrib.auth.base_user.AbstractBaseUser.clean()'.
         super().clean()
-        klass = self.__class__  # type: Type[BaseUser]
+        klass: Type[BaseUser] = self.__class__
         self.email_address = klass.objects.normalize_email(self.email_address)
 
     def deactivate(self) -> None:
