@@ -63,7 +63,7 @@ setup(
     include_package_data=True,
     package_data=_package_data,
     install_requires=[
-        'Django>=2.1',
+        'Django>=4.2',
     ],
     test_suite='tests',
     tests_require=[
@@ -77,7 +77,7 @@ setup(
     classifiers=[
         # See https://pypi.org/classifiers/
         'Development Status :: 3 - Alpha',
-        'Framework :: Django :: 2.1',
+        'Framework :: Django :: 4.2',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
