@@ -13,24 +13,10 @@ from django.db import models
 
 from . import base_models
 
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.utils import timezone
+import django.contrib.auth.models
 
 
-def update_last_login(sender: Any, user: AbstractBaseUser, **kwargs: Any) -> None:
-    """
-    A signal receiver which updates the last_login date for
-    the user logging in.
-
-    We are not able to use the original function (of which this one is a copy)
-    because we can not import :mod:`django.contrib.auth.models` without adding
-    ``django.contrib.auth`` to setting ``INSTALLED_APPS``.
-
-    Source: copy of :func:`django.contrib.auth.models.update_last_login` @ Django 2.1.1
-
-    """
-    user.last_login = timezone.now()
-    user.save(update_fields=['last_login'])
+update_last_login = django.contrib.auth.models.update_last_login
 
 
 def get_or_create_system_user() -> User:
