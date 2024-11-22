@@ -71,7 +71,7 @@ install-deps-dev: ## Install dependencies for development
 lint: FLAKE8_FILES = *.py "$(SOURCES_ROOT)"
 lint: ## run tools for code style analysis, static type check, etc
 	flake8  --config=setup.cfg  $(FLAKE8_FILES)
-	mypy  --config-file setup.cfg
+	mypy
 
 test: ## run tests quickly with the default Tox Python
 	tox -e "$(TOXENV)"
