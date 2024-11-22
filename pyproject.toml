@@ -12,3 +12,6 @@ requires = [
   "wheel==0.45.0",
 ]
 build-backend = "setuptools.build_meta:__legacy__"
+
+[tool.distutils.bdist_wheel]
+universal = false
