@@ -110,6 +110,7 @@ dist: build ## builds source and wheel package
 	python -m build --sdist
 	python -m build --wheel
 	twine check dist/*
+	twine check --strict dist/*
 	ls -l dist
 
 upload-release: ## upload dist packages
