@@ -1,17 +1,83 @@
 # Python Project Configuration
 #
 # Documentation:
+# - https://packaging.python.org/en/latest/specifications/pyproject-toml/
+#   (https://github.com/pypa/packaging.python.org/blob/caa20073/source/specifications/pyproject-toml.rst)
 # - https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/
-# - https://github.com/pypa/pip/blob/23.2.1/docs/html/reference/build-system/pyproject-toml.md
-# - https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
-# - https://github.com/pypa/packaging.python.org/blob/df2c8b22/source/specifications/declaring-project-metadata.rst
+#   (https://github.com/pypa/pip/blob/24.2/docs/html/reference/build-system/pyproject-toml.md)
+# - https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+#   (https://github.com/pypa/setuptools/blob/v70.3.0/docs/userguide/pyproject_config.rst)
 
 [build-system]
 requires = [
   "setuptools==71.1.0",
   "wheel==0.45.0",
 ]
-build-backend = "setuptools.build_meta:__legacy__"
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fyndata-django-accounts"
+dependencies = [
+  "Django>=4.2",
+]
+requires-python = ">=3.8, <3.11"
+authors = [
+  {name = "Fyndata (Fynpal SpA)", email = "no-reply@fyndata.com"},
+]
+description = "Reusable Django app to replace the default Django user (account) model."
+readme = "README.rst"
+license = {text = "MIT"}
+keywords = [
+  "fyndata-django-accounts",
+]
+classifiers = [
+  # See https://pypi.org/classifiers/
+  "Development Status :: 3 - Alpha",
+  "Framework :: Django :: 4.2",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+
+[project.urls]
+Homepage = "https://github.com/fyndata/fyndata-django-accounts"
+Changelog = "https://github.com/fyndata/fyndata-django-accounts/blob/develop/HISTORY.rst"
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["*"]
+exclude = [
+  "tests*",
+]
+namespaces = true
+
+[tool.setuptools.package-data]
+# note: the "typing information" of this project's packages is not made available to its users
+#   automatically; it needs to be packaged and distributed. The way to do so is fairly new and
+#   it is specified in PEP 561 - "Distributing and Packaging Type Information".
+#   See:
+#   - https://www.python.org/dev/peps/pep-0561/#packaging-type-information
+#   - https://github.com/python/typing/issues/84
+#   - https://github.com/python/mypy/issues/3930
+# warning: remember to replicate this in the manifest file for source distribution ('MANIFEST.in').
+fd_dj_accounts = [
+  # Indicates that the "typing information" of the package should be distributed.
+  "py.typed",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "fd_dj_accounts.__version__"}
 
 [tool.distutils.bdist_wheel]
 universal = false
