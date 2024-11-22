@@ -25,6 +25,8 @@ DATABASES = {
 ROOT_URLCONF = "tests.urls"
 
 INSTALLED_APPS = [
+    'django.contrib.auth',
+    'django.contrib.contenttypes',  # Required by 'django.contrib.auth' for permissions.
     'fd_dj_accounts',
 ]
 
