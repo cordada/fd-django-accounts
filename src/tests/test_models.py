@@ -157,6 +157,22 @@ class UserTestCase(TestCase):
         deactivated_at_2 = user.deactivated_at
         self.assertEqual(deactivated_at_1, deactivated_at_2)
 
+    def test_has_attributes_and_methods_required_by_django_admin(self) -> None:
+        # See: https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#custom-users-and-django-contrib-admin # noqa: E501
+        user = User()
+
+        self.assertTrue(hasattr(user, 'is_staff'))
+        self.assertIsInstance(user.is_staff, bool)
+
+        self.assertTrue(hasattr(user, 'is_active'))
+        self.assertIsInstance(user.is_active, bool)
+
+        self.assertTrue(hasattr(user, 'has_perm'))
+        self.assertTrue(callable(user.has_perm))
+
+        self.assertTrue(hasattr(user, 'has_module_perms'))
+        self.assertTrue(callable(user.has_module_perms))
+
 
 class IsActiveTestCase(TestCase):
     """
@@ -222,3 +238,18 @@ class AnonymousUserTests(SimpleTestCase):
     def test_deactivate(self):  # type: ignore
         with self.assertRaisesMessage(NotImplementedError, self.no_repr_msg):
             self.user.deactivate()
+
+    def test_has_attributes_and_methods_required_by_django_admin(self) -> None:
+        user = self.user
+
+        self.assertTrue(hasattr(user, 'is_staff'))
+        self.assertIsInstance(user.is_staff, bool)
+
+        self.assertTrue(hasattr(user, 'is_active'))
+        self.assertIsInstance(user.is_active, bool)
+
+        self.assertTrue(hasattr(user, 'has_perm'))
+        self.assertTrue(callable(user.has_perm))
+
+        self.assertTrue(hasattr(user, 'has_module_perms'))
+        self.assertTrue(callable(user.has_module_perms))

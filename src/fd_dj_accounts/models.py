@@ -14,6 +14,7 @@ from django.db import models
 from . import base_models
 
 import django.contrib.auth.models
+from django.contrib.auth.models import _user_has_perm, _user_has_module_perms
 
 
 update_last_login = django.contrib.auth.models.update_last_login
@@ -149,6 +150,47 @@ class User(base_models.BaseUser):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    def has_perm(self, perm: str, obj: Optional[object] = None) -> bool:
+        """
+        Return True if the user has the specified permission. If an object is provided,
+        check permissions for that object.
+
+        Note:
+            This method is required for compatibility with Django Admin.
+            See: https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#custom-users-and-django-contrib-admin # noqa: E501
+
+        Source:
+            Copy of :meth:`django.contrib.auth.models.PermissionsMixin.has_perm()` @ Django 4.2.3
+            with the following changes:
+            - Add type annotations.
+        """
+        # Active superusers have all permissions.
+        if self.is_active and self.is_superuser:
+            return True
+
+        # Otherwise we need to check the backends.
+        return _user_has_perm(self, perm, obj)  # type: ignore[no-any-return]
+
+    def has_module_perms(self, app_label: str) -> bool:
+        """
+        Return True if the user has any permissions in the given app label.
+        Use similar logic as has_perm(), above.
+
+        Note:
+            This method is required for compatibility with Django Admin.
+
+        Source:
+            Copy of
+            :meth:`django.contrib.auth.models.PermissionsMixin.has_module_perms()` @ Django 4.2.3
+            with the following changes:
+            - Add type annotations.
+        """
+        # Active superusers have all permissions.
+        if self.is_active and self.is_superuser:
+            return True
+
+        return _user_has_module_perms(self, app_label)  # type: ignore[no-any-return]
+
 
 class AnonymousUser(base_models.AnonymousUser):
 
@@ -162,3 +204,9 @@ class AnonymousUser(base_models.AnonymousUser):
     """
 
     created_by = None
+
+    def has_perm(self, perm: str, obj: Optional[object] = None) -> bool:
+        return _user_has_perm(self, perm, obj=obj)  # type: ignore[no-any-return]
+
+    def has_module_perms(self, module: str) -> bool:
+        return _user_has_module_perms(self, module)  # type: ignore[no-any-return]
