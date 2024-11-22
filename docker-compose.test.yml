@@ -36,7 +36,7 @@ services:
     image: docker.io/library/python:3.10.9
 
   db-test:
-    image: docker.io/library/postgres:12.3
+    image: docker.io/library/postgres:15.5-bookworm
     environment:
       POSTGRES_DB: app_test
       POSTGRES_PASSWORD: "123"

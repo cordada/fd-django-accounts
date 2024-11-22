@@ -2,7 +2,10 @@
 Concrete models.
 
 """
-from typing import Any, Optional  # noqa: F401
+
+from __future__ import annotations
+
+from typing import Any, Optional
 import uuid
 
 from django.conf import settings
@@ -10,27 +13,14 @@ from django.db import models
 
 from . import base_models
 
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.utils import timezone
+import django.contrib.auth.models
+from django.contrib.auth.models import _user_has_perm, _user_has_module_perms
 
 
-def update_last_login(sender: Any, user: AbstractBaseUser, **kwargs: Any) -> None:
-    """
-    A signal receiver which updates the last_login date for
-    the user logging in.
-
-    We are not able to use the original function (of which this one is a copy)
-    because we can not import :mod:`django.contrib.auth.models` without adding
-    ``django.contrib.auth`` to setting ``INSTALLED_APPS``.
-
-    Source: copy of :func:`django.contrib.auth.models.update_last_login` @ Django 2.1.1
-
-    """
-    user.last_login = timezone.now()
-    user.save(update_fields=['last_login'])
+update_last_login = django.contrib.auth.models.update_last_login
 
 
-def get_or_create_system_user() -> 'User':
+def get_or_create_system_user() -> User:
     """Return the "system user", which is created by itself.
 
     The system user is created, by default:
@@ -44,7 +34,7 @@ def get_or_create_system_user() -> 'User':
     """
     system_user_email_address = settings.APP_ACCOUNTS_SYSTEM_USERNAME
     try:
-        system_user = User.objects.get(email_address=system_user_email_address)  # type: User
+        system_user: User = User.objects.get(email_address=system_user_email_address)
     except User.DoesNotExist:
         system_user_uuid = uuid.uuid4()
         system_user = User(
@@ -59,9 +49,7 @@ def get_or_create_system_user() -> 'User':
         # Before calling 'save()' we call the parent class' implementation as a trick to skip
         #   validating field 'created_by' because it is a self reference. This only makes sense
         #   when creating a system user.
-        # note: skip mypy check because it yields 'error: "super" used outside class'.
-        #   See: https://github.com/python/mypy/issues/1167
-        super(User, system_user).save()  # type: ignore
+        super(User, system_user).save()
         system_user.save()
 
     return system_user
@@ -95,7 +83,7 @@ class UserManager(base_models.UserManager):
         if not email_address:
             raise ValueError('The given email address must be set')
         email_address = self.normalize_email(email_address)
-        user = self.model(email_address=email_address, **extra_fields)  # type: User
+        user: User = self.model(email_address=email_address, **extra_fields)
         user.set_password(password)
 
         # warning: we can not just access foreign key field 'created_by' because if it has not
@@ -162,6 +150,47 @@ class User(base_models.BaseUser):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    def has_perm(self, perm: str, obj: Optional[object] = None) -> bool:
+        """
+        Return True if the user has the specified permission. If an object is provided,
+        check permissions for that object.
+
+        Note:
+            This method is required for compatibility with Django Admin.
+            See: https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#custom-users-and-django-contrib-admin # noqa: E501
+
+        Source:
+            Copy of :meth:`django.contrib.auth.models.PermissionsMixin.has_perm()` @ Django 4.2.3
+            with the following changes:
+            - Add type annotations.
+        """
+        # Active superusers have all permissions.
+        if self.is_active and self.is_superuser:
+            return True
+
+        # Otherwise we need to check the backends.
+        return _user_has_perm(self, perm, obj)  # type: ignore[no-any-return]
+
+    def has_module_perms(self, app_label: str) -> bool:
+        """
+        Return True if the user has any permissions in the given app label.
+        Use similar logic as has_perm(), above.
+
+        Note:
+            This method is required for compatibility with Django Admin.
+
+        Source:
+            Copy of
+            :meth:`django.contrib.auth.models.PermissionsMixin.has_module_perms()` @ Django 4.2.3
+            with the following changes:
+            - Add type annotations.
+        """
+        # Active superusers have all permissions.
+        if self.is_active and self.is_superuser:
+            return True
+
+        return _user_has_module_perms(self, app_label)  # type: ignore[no-any-return]
+
 
 class AnonymousUser(base_models.AnonymousUser):
 
@@ -175,3 +204,9 @@ class AnonymousUser(base_models.AnonymousUser):
     """
 
     created_by = None
+
+    def has_perm(self, perm: str, obj: Optional[object] = None) -> bool:
+        return _user_has_perm(self, perm, obj=obj)  # type: ignore[no-any-return]
+
+    def has_module_perms(self, module: str) -> bool:
+        return _user_has_module_perms(self, module)  # type: ignore[no-any-return]

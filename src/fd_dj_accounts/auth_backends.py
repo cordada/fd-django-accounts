@@ -1,15 +1,7 @@
 """Authentication backends for :func:`django.contrib.auth.authenticate`.
 
 This module allows using a custom user model for authentication and
-authorization when ``django.contrib.auth`` is not in ``INSTALLED_APPS``,
-because that app will still play a significant (although subtle) role.
-
-Why? Because, unfortunately, the default authentication backend
-:class:`django.contrib.auth.backends.ModelBackend` requires that the chosen
-auth user model is a subclass of
-:class:`django.contrib.auth.models.AbstractUser`, which is an extremely
-opinionated user model, unlike
-:class:`django.contrib.auth.base_user.AbstractBaseUser`.
+authorization.
 
 The provided backend :class:`AuthUserModelAuthBackend` does not require that
 the project where it is used has :class:`fd_dj_accounts.models.User`
@@ -26,71 +18,30 @@ Notes:
   with ``models.AbstractUser`` (the latter is a subclass of the former).
 - Although Django names these kind of backends as "Authentication Backends",
   they are also used for authorization (see
-  https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#handling-authorization-in-custom-backends).
+  https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#handling-authorization-in-custom-backends).
 - The setting ``AUTHENTICATION_BACKENDS`` defines which backends are used.
 
-
-TODO: submit the module's code to the Django project.
-
 """
-from typing import Any, Optional
+
+from __future__ import annotations
+
+from typing import Any, Optional, Set, TYPE_CHECKING, Union
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.http import HttpRequest
+
+if TYPE_CHECKING:
+    import django.db.models
+
+    from .base_models import AnonymousUser
 
 
 UserModel = get_user_model()
 
 
-class AbstractAuthBackend:
-
-    """
-    Minimal abstract auth backend as required by Django.
-
-    Requirements are described in Django docs
-    https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#writing-an-authentication-backend
-
-    """
-
-    def authenticate(
-        self,
-        request: Optional[HttpRequest],
-        **kwargs: Any,
-    ) -> Optional[Any]:
-        """
-        Validate credentials and return a user object.
-
-        The keyword arguments must be enough to identify the corresponding user
-        and validate the credentials.
-
-        A common signature for this method is
-        ``authenticate(self, request, username=None, password=None)``.
-
-        :param request: may be None if it wasn't provided to ``authenticate()``,
-            which passes it on to the backend
-        :param kwargs: user's credentials set to check
-        :return: user object that matches the credentials set if they are
-            valid, else None
-
-        """
-        raise NotImplementedError  # pragma: no cover
-
-    def get_user(self, user_id: Any) -> Optional[Any]:
-        """
-        Return user object identified by ``user_id``, if available for auth.
-
-        :param user_id: the primary key of the user object (it could be a
-            username, database ID or however it is defined in the user model),
-            or the string version: ``str(user_id)``
-        :return: user object, if it exists and is usable for authentication,
-            else None
-
-        """
-        raise NotImplementedError  # pragma: no cover
-
-
-class AuthUserModelAuthBackend(AbstractAuthBackend):
+class AuthUserModelAuthBackend(ModelBackend):
 
     """
     Authenticate against ``settings.AUTH_USER_MODEL``.
@@ -107,49 +58,72 @@ class AuthUserModelAuthBackend(AbstractAuthBackend):
     .. seealso::
 
         Django docs about "Writing an authentication backend"
-        https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#writing-an-authentication-backend
-
-
-    .. note::
-
-        The code is largely based on
-        :class:`django.contrib.auth.backends.ModelBackend`.
+        https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#writing-an-authentication-backend
 
     """
 
     def authenticate(
         self,
         request: Optional[HttpRequest],
-        username: Any = None,
+        username: Optional[str] = None,
         password: Optional[str] = None,
         **kwargs: Any,
     ) -> Optional[AbstractBaseUser]:
-        # TODO: raise an error if neither arg 'username' nor an arg named as the auth user model
-        #   'USERNAME_FIELD' was provided. By returning None in that case, the function is hiding
-        #   the fact that the call signature was wrong in the first place i.e. swallowing a
-        #   programming error. See test
-        #   'AuthUserModelAuthBackendTestMixin.test_authenticate_bad_username_field'.
+        # Use implementation from :class`django.contrib.auth.backends.ModelBackend`.
+        return super().authenticate(request, username, password, **kwargs)
 
-        if username is None:
-            username = kwargs.get(UserModel.USERNAME_FIELD)
-        try:
-            user = UserModel._default_manager.get_by_natural_key(username)
-        except UserModel.DoesNotExist:
-            # Run the default password hasher once to reduce the timing
-            # difference between an existing and a nonexistent user (#20760).
-            UserModel().set_password(password)
-        else:
-            if user.check_password(password) and self.user_can_authenticate(user):
-                return user
+    def user_can_authenticate(self, user: Union[AbstractBaseUser, AnonymousUser]) -> bool:
+        # Use implementation from :class`django.contrib.auth.backends.ModelBackend`.
+        return super().user_can_authenticate(user)  # type: ignore[no-any-return]
 
-        return None
+    _get_user_permissions = None  # Unsupported operation
 
-    def user_can_authenticate(self, user: AbstractBaseUser) -> bool:
-        """
-        Do not let inactive users authenticate.
-        """
-        let_user_authenticate: bool = user.is_active
-        return let_user_authenticate
+    _get_group_permissions = None  # Unsupported operation
+
+    _get_permissions = None  # Unsupported operation
+
+    def get_user_permissions(
+        self,
+        user_obj: Union[AbstractBaseUser, AnonymousUser],
+        obj: Optional[django.db.models.Model] = None,
+    ) -> Set[str]:
+        # Use implementation from :class`django.contrib.auth.backends.BaseBackend`.
+        return super(ModelBackend, self).get_user_permissions(user_obj, obj)  # type: ignore[no-any-return] # noqa: E501
+
+    def get_group_permissions(
+        self,
+        user_obj: Union[AbstractBaseUser, AnonymousUser],
+        obj: Optional[django.db.models.Model] = None,
+    ) -> Set[str]:
+        # Use implementation from :class`django.contrib.auth.backends.BaseBackend`.
+        return super(ModelBackend, self).get_group_permissions(user_obj, obj)  # type: ignore[no-any-return] # noqa: E501
+
+    def get_all_permissions(
+        self,
+        user_obj: Union[AbstractBaseUser, AnonymousUser],
+        obj: Optional[django.db.models.Model] = None,
+    ) -> Set[str]:
+        # Use implementation from :class`django.contrib.auth.backends.ModelBackend`.
+        return super().get_all_permissions(user_obj, obj)  # type: ignore[no-any-return]
+
+    def has_perm(
+        self,
+        user_obj: Union[AbstractBaseUser, AnonymousUser],
+        perm: str,
+        obj: Optional[django.db.models.Model] = None,
+    ) -> bool:
+        # Use implementation from :class`django.contrib.auth.backends.ModelBackend`.
+        return super().has_perm(user_obj, perm, obj)  # type: ignore[no-any-return]
+
+    def has_module_perms(
+        self,
+        user_obj: Union[AbstractBaseUser, AnonymousUser],
+        app_label: str,
+    ) -> bool:
+        # Use implementation from :class`django.contrib.auth.backends.ModelBackend`.
+        return super().has_module_perms(user_obj, app_label)  # type: ignore[no-any-return]
+
+    with_perm = None  # Unsupported operation
 
     def get_user(self, user_id: Any) -> Optional[AbstractBaseUser]:
         try:

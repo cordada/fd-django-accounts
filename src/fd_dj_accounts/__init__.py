@@ -11,21 +11,6 @@ whose implementation is located in the package (and Django app)
     avoid possible namespace clashes in the future. However, we refer to
     this Django app as "Fyndata Accounts" or just "Accounts".
 
-To not include ``django.contrib.auth`` in a project's ``INSTALLED_APPS``
-but still use some Django auth features is painful. "Fyndata Accounts"
-takes the pain away.
-
-However, it is not necessary to include this app in a project as a Django app
-(i.e. add it to ``INSTALLED_APPS``) to be able to use its contents (except
-for :mod:`fd_dj_accounts.models`) because models, model managers and related
-code is split in 2 modules: :mod:`fd_dj_accounts.base_models` and
-:mod:`fd_dj_accounts.models` (analogous to the separation between
-:mod:`django.contrib.auth.base_user` and :mod:`django.contrib.auth.models`).
-
-This separation allows importing :class:`fd_dj_accounts.base_models.BaseUser`
-(and appropriate model manager and "anonymous user" classes) even if this app
-is not in the project's ``INSTALLED_APPS``.
-
 .. note::
     Throughout Django code and documentation the term "user" is short for
     "user account".
@@ -37,9 +22,7 @@ Authentication Backend
 Custom Django authentication backend
 :class:`fd_dj_accounts.auth_backends.AuthUserModelAuthBackend` allows using
 ANY custom user model for authentication and authorization (not necessarily
-the one included in ``fd_dj_accounts``) when ``django.contrib.auth`` is not
-in ``INSTALLED_APPS``. That is just not possible with the stock auth backend
-(as of Django 2.1.1).
+the one included in ``fd_dj_accounts``).
 
 To use this backend, the selected auth user model must be a subclass of
 :class:`django.contrib.auth.base_user.AbstractBaseUser` (or be compatible
@@ -91,14 +74,14 @@ About customization of the Django user model
 --------------------------------------------
 
 .. seealso::
-    https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#specifying-a-custom-user-model
-    https://docs.djangoproject.com/en/2.1/ref/contrib/auth/#django.contrib.auth.models.User
+    https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#specifying-a-custom-user-model
+    https://docs.djangoproject.com/en/4.2/ref/contrib/auth/#django.contrib.auth.models.User
 
 
 """
 
 
-__version__ = '0.9.0'
+__version__ = '0.10.0'
 
 
 default_app_config = 'fd_dj_accounts.apps.AccountsAppConfig'

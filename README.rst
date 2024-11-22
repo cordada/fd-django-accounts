@@ -53,6 +53,9 @@ Add it to your ``INSTALLED_APPS``:
 
     INSTALLED_APPS = (
         ...
+        'django.contrib.auth',  # Required by 'fd_dj_accounts'.
+        'django.contrib.contenttypes',  # Required by 'django.contrib.auth'.
+        ...
         'fd_dj_accounts',
         ...
     )
