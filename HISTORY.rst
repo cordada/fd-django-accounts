@@ -6,6 +6,18 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.10.0 (2024-11-22)
++++++++++++++++++++
+
+- (PR #299, 2024-11-20) deps: Update PostgreSQL from version ≥12.3 to 15.5
+- (PR #300, 2024-11-20) chore(deps): Bump the production-dependencies group with 7 updates
+- (PR #303, 2024-11-20) chore(deps): Bump flake8 from 6.0.0 to 7.1.1
+- (PR #304, 2024-11-20) chore(deps): Bump tox from 4.11.3 to 4.23.2
+- (PR #305, 2024-11-21) deps: Update `Django` from ≥2.1 to ≥4.2
+- (PR #306, 2024-11-21) Improve type annotations
+- (PR #307, 2024-11-22) Update for Django 4.2. ⚠️ Contains breaking changes.
+- (PR #308, 2024-11-22) Add methods required by Django Admin to `.models.User`
+
 0.9.0 (2024-02-26)
 ++++++++++++++++++
 
