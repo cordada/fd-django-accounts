@@ -70,8 +70,8 @@ install-deps-dev: ## Install dependencies for development
 
 lint: FLAKE8_FILES = *.py "$(SOURCES_ROOT)"
 lint: ## run tools for code style analysis, static type check, etc
-	flake8  --config=setup.cfg  $(FLAKE8_FILES)
-	mypy  --config-file setup.cfg
+	flake8 $(FLAKE8_FILES)
+	mypy
 
 test: ## run tests quickly with the default Tox Python
 	tox -e "$(TOXENV)"
@@ -80,7 +80,7 @@ test-all: ## run tests on every Python version with tox
 	tox
 
 test-coverage: ## run tests and record test coverage
-	coverage run --rcfile=setup.cfg runtests.py tests
+	coverage run --rcfile=.coveragerc.test.ini runtests.py tests
 
 test-coverage-report: test-coverage-report-console
 test-coverage-report: test-coverage-report-xml
@@ -88,13 +88,13 @@ test-coverage-report: test-coverage-report-html
 test-coverage-report: ## Run tests, measure code coverage, and generate reports
 
 test-coverage-report-console: ## print test coverage summary
-	coverage report --rcfile=setup.cfg -m
+	coverage report --rcfile=.coveragerc.test.ini -m
 
 test-coverage-report-xml: ## Generate test coverage XML report
-	coverage xml --rcfile=setup.cfg
+	coverage xml --rcfile=.coveragerc.test.ini
 
 test-coverage-report-html: ## generate test coverage HTML report
-	coverage html --rcfile=setup.cfg
+	coverage html --rcfile=.coveragerc.test.ini
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/fd_dj_accounts.rst
