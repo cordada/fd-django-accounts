@@ -6,6 +6,18 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.11.0 (2024-11-25)
++++++++++++++++++++
+
+- (PR #311, 2024-11-22) Move Mypy, Flake8, Coverage.py configurations to separate configuration files
+- (PR #312, 2024-11-22) deps: Update `setuptools` from ≤69.1.0 to 71.1.0
+- (PR #313, 2024-11-22) deps: Update `wheel` from ≤0.42.0 to 0.45.0
+- (PR #314, 2024-11-22) deps: Update `pip` from 22.3.1 to 24.2
+- (PR #315, 2024-11-22) Replace `setup.py sdist` and `bdist_wheel` with `build`
+- (PR #316, 2024-11-22) When running `twine check`, fail on warnings
+- (PR #318, 2024-11-25) Update Bumpversion configuration to be compliant with Commitlint
+- (PR #317, 2024-11-25) Replace Setuptools Configuration with Python Project Configuration
+
 0.10.0 (2024-11-22)
 +++++++++++++++++++
 
