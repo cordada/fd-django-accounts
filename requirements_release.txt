@@ -1,6 +1,7 @@
 -r requirements.txt
 
+build==1.2.2.post1
 bumpversion==0.5.3
-setuptools==69.1.0
+setuptools==71.1.0
 twine==4.0.2
-wheel==0.42.0
+wheel==0.45.0
