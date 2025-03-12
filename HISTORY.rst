@@ -6,6 +6,20 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.13.0 (2025-03-12)
++++++++++++++++++++
+
+- (PR #328, 2024-12-03) chore: Bump codecov/codecov-action from 5.0.6 to 5.0.7 in the production-dependencies group
+- (PR #327, 2024-12-03) chore(deps): Bump mypy from 1.8.0 to 1.13.0
+- (PR #326, 2024-12-09) chore(deps): Bump wheel from 0.45.0 to 0.45.1
+- (PR #325, 2024-12-09) chore(deps): Bump psycopg2 from 2.9.9 to 2.9.10
+- (PR #329, 2025-01-03) chore: Bump the production-dependencies group with 3 updates
+- (PR #331, 2025-01-28) chore(deps): Bump twine from 5.1.1 to 6.0.1
+- (PR #336, 2025-02-28) chore: Drop support for Python 3.8
+- (PR #337, 2025-02-28) chore: Bump the production-dependencies group across 1 directory with 5 updates
+- (PR #338, 2025-02-28) Use most recent patch version of Python in CI/CD configuration
+- (PR #335, 2025-02-28) chore(deps): Bump twine from 6.0.1 to 6.1.0
+
 0.12.0 (2024-11-25)
 +++++++++++++++++++
 
