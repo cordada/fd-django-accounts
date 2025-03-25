@@ -10,7 +10,7 @@
 
 [build-system]
 requires = [
-  "setuptools==71.1.0",
+  "setuptools==75.8.2",
   "wheel==0.45.1",
 ]
 build-backend = "setuptools.build_meta"
@@ -20,7 +20,7 @@ name = "fyndata-django-accounts"
 dependencies = [
   "Django>=4.2",
 ]
-requires-python = ">=3.8, <3.11"
+requires-python = ">=3.9, <3.11"
 authors = [
   {name = "Fyndata (Fynpal SpA)", email = "no-reply@fyndata.com"},
 ]
