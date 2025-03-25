@@ -6,6 +6,15 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.14.0 (2025-03-25)
++++++++++++++++++++
+
+- (PR #339, 2025-03-24) chore(deps): Bump setuptools from 71.1.0 to 75.8.2
+- (PR #340, 2025-03-24) chore(deps): Bump mypy from 1.13.0 to 1.15.0
+- (PR #341, 2025-03-24) chore(deps): Bump coverage from 7.4.1 to 7.6.12
+- (PR #345, 2025-03-24) Improve test coverage exclusions
+- (PR #344, 2025-03-24) Require Python ≥3.9
+
 0.13.0 (2025-03-12)
 +++++++++++++++++++
 
