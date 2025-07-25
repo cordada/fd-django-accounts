@@ -26,7 +26,8 @@ authors = [
 ]
 description = "Reusable Django app to replace the default Django user (account) model."
 readme = "README.rst"
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE"]
 keywords = [
   "fyndata-django-accounts",
 ]
@@ -35,7 +36,6 @@ classifiers = [
   "Development Status :: 3 - Alpha",
   "Framework :: Django :: 4.2",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Natural Language :: English",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.9",
