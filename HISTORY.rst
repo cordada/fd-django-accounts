@@ -6,6 +6,20 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.15.0 (2025-07-25)
++++++++++++++++++++
+
+- (PR #354, 2025-05-20) chore(deps): Bump setuptools from 75.8.2 to 78.1.1
+- (PR #353, 2025-06-09) chore: Bump the production-dependencies group with 6 updates
+- (PR #350, 2025-06-26) chore(deps): Bump flake8 from 7.1.1 to 7.2.0
+- (PR #355, 2025-06-26) chore(deps): Bump tox from 4.23.2 to 4.26.0
+- (PR #356, 2025-06-26) chore(deps): Bump setuptools from 78.1.1 to 80.9.0
+- (PR #359, 2025-07-09) chore(deps): Bump coverage from 7.6.12 to 7.9.1
+- (PR #360, 2025-07-25) Remove upper bound on Python version
+- (PR #357, 2025-07-25) chore(deps): Bump mypy from 1.15.0 to 1.16.1
+- (PR #358, 2025-07-25) chore(deps): Bump flake8 from 7.2.0 to 7.3.0
+- (PR #361, 2025-07-25) Fix Python package license metadata deprecations
+
 0.14.0 (2025-03-25)
 +++++++++++++++++++
 
