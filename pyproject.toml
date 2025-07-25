@@ -20,7 +20,7 @@ name = "fyndata-django-accounts"
 dependencies = [
   "Django>=4.2",
 ]
-requires-python = ">=3.9, <3.11"
+requires-python = ">=3.9"
 authors = [
   {name = "Fyndata (Fynpal SpA)", email = "no-reply@fyndata.com"},
 ]
