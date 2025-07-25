@@ -81,7 +81,7 @@ About customization of the Django user model
 """
 
 
-__version__ = '0.14.0'
+__version__ = '0.15.0'
 
 
 default_app_config = 'fd_dj_accounts.apps.AccountsAppConfig'
