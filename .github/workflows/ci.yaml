@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Check Out VCS Repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
 
       - name: Set Up Python ${{ matrix.python_version }}
         id: set_up_python
@@ -46,7 +46,7 @@ jobs:
         run: make python-virtualenv PYTHON_VIRTUALENV_DIR="venv"
 
       - name: Restoring/Saving Cache
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4.2.4
         with:
           path: "venv"
           key: py-v1-deps-${{ runner.os }}-${{ steps.set_up_python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_test.txt') }}-${{ hashFiles('requirements_release.txt') }}-${{ hashFiles('Makefile', 'make/**.mk') }}
@@ -93,7 +93,7 @@ jobs:
 
     steps:
       - name: Check Out VCS Repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
 
       - name: Set Up Python ${{ matrix.python_version }}
         id: set_up_python
@@ -103,7 +103,7 @@ jobs:
           check-latest: true
 
       - name: Restoring/Saving Cache
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4.2.4
         with:
           path: "venv"
           key: py-v1-deps-${{ runner.os }}-${{ steps.set_up_python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements_test.txt') }}-${{ hashFiles('requirements_release.txt') }}-${{ hashFiles('Makefile', 'make/**.mk') }}
@@ -142,7 +142,7 @@ jobs:
           make test-coverage-report
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5.4.3
+        uses: codecov/codecov-action@fdcc8476540edceab3de004e990f80d881c6cc00 # v5.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./test-reports/coverage/
