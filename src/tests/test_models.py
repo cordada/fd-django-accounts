@@ -43,12 +43,14 @@ class UserManagerTestCase(TestCase):
         user1 = User.objects.create_user(user1_email_address)
         self.assertEqual(user1.email_address, user1_email_address)
         self.assertEqual(user1.get_username(), user1_email_address)
+        self.assertEqual(user1.username, user1_email_address)
         self.assertFalse(user1.has_usable_password())
 
         user2_email_address = 'user2@normal.com'
         user2 = User.objects.create_user(user2_email_address, created_by=user1)
         self.assertEqual(user2.email_address, user2_email_address)
         self.assertEqual(user2.get_username(), user2_email_address)
+        self.assertEqual(user2.username, user2_email_address)
         self.assertFalse(user2.has_usable_password())
 
     def test_empty_username(self):  # type: ignore
@@ -133,6 +135,22 @@ class UserTestCase(TestCase):
         # Test field attribute 'related_name'.
         self.assertListEqual(list(user_creator.users_created.all()), [user])
 
+    def test_username_property(self) -> None:
+        user = User.objects.create_user(email_address='test@example.com')
+        self.assertEqual(user.email_address, 'test@example.com')
+
+        # Test getter of 'username' property.
+
+        self.assertEqual(user.username, 'test@example.com')
+
+        # Test setter of 'username' property.
+
+        user.username = 'new_username@example.com'
+        user.save()
+        user.refresh_from_db()
+
+        self.assertEqual(user.email_address, 'new_username@example.com')
+
     def test_deactivate(self):  # type: ignore
         user_creator = User.objects.create_user(email_address='user_creator@example.com')
         user = User(email_address='foo@BAR.com', created_by=user_creator)
@@ -203,6 +221,7 @@ class AnonymousUserTests(SimpleTestCase):
         self.assertIsNone(self.user.pk)
         self.assertEqual(self.user.email_address, '')
         self.assertEqual(self.user.get_username(), '')
+        self.assertEqual(self.user.username, '')
         self.assertIs(self.user.is_anonymous, True)
         self.assertIs(self.user.is_authenticated, False)
         self.assertIs(self.user.is_staff, False)

@@ -181,6 +181,16 @@ class BaseUser(django.contrib.auth.base_user.AbstractBaseUser):
             self.deactivated_at = timezone.now()
         self.save()
 
+    @property
+    def username(self) -> str:
+        # For compatibility with `django.contrib.auth.models.AbstractUser.username`.
+        return self.get_username()  # type: ignore[no-any-return]
+
+    @username.setter
+    def username(self, value: str) -> None:
+        # For compatibility with `django.contrib.auth.models.AbstractUser.username`.
+        setattr(self, self.USERNAME_FIELD, value)
+
 
 class AnonymousUser:
 
@@ -242,3 +252,8 @@ class AnonymousUser:
     def get_username(self) -> str:
         # Class attribute 'BaseUser.USERNAME_FIELD' is 'email_address'.
         return self.email_address
+
+    @property
+    def username(self) -> str:
+        # For compatibility with `django.contrib.auth.models.AnonymousUser.username`.
+        return self.get_username()
