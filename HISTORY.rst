@@ -6,6 +6,21 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.16.0 (2025-12-04)
++++++++++++++++++++
+
+- (PR #367, 2025-08-01) Pin GitHub Action `codecov/codecov-action` to commit hash
+- (PR #364, 2025-08-01) chore(deps): Bump tox from 4.27.0 to 4.28.4
+- (PR #370, 2025-09-25) chore: Bump the production-dependencies group with 5 updates
+- (PR #369, 2025-09-25) chore(deps): Bump coverage from 7.9.1 to 7.10.6
+- (PR #366, 2025-09-25) chore(deps): Bump mypy from 1.16.1 to 1.17.1
+- (PR #368, 2025-09-25) chore(deps): Bump build from 1.2.2.post1 to 1.3.0
+- (PR #376, 2025-12-04) chore: Bump the production-dependencies group across 1 directory with 7 updates
+- (PR #371, 2025-12-04) chore(deps): Bump mypy from 1.17.1 to 1.18.2
+- (PR #372, 2025-12-04) chore(deps): Bump tox from 4.28.4 to 4.30.2
+- (PR #373, 2025-12-04) chore(deps): Bump coverage from 7.10.6 to 7.10.7
+- (PR #377, 2025-12-04) Add `username` property to `BaseUser` and `AnonymousUser`
+
 0.15.0 (2025-07-25)
 +++++++++++++++++++
 
