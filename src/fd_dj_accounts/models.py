@@ -5,11 +5,12 @@ Concrete models.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any, Iterable, Optional
 import uuid
 
 from django.conf import settings
 from django.db import models
+from django.utils.itercompat import is_iterable
 
 from . import base_models
 
@@ -171,6 +172,26 @@ class User(base_models.BaseUser):
         # Otherwise we need to check the backends.
         return _user_has_perm(self, perm, obj)  # type: ignore[no-any-return]
 
+    def has_perms(self, perm_list: Iterable[str], obj: Optional[object] = None) -> bool:
+        """
+        Return True if the user has each of the specified permissions. If
+        object is passed, check if the user has all required perms for it.
+
+        Note:
+            This method is required for compatibility with Django REST Framework.
+            See:
+            - https://github.com/encode/django-rest-framework/blob/de018df2/rest_framework/authentication.py # noqa: E501
+            - https://github.com/encode/django-rest-framework/blob/de018df2/rest_framework/permissions.py # noqa: E501
+
+        Source:
+            Copy of :meth:`django.contrib.auth.models.PermissionsMixin.has_perms()` @ Django 4.2.23
+            with the following changes:
+            - Add type annotations.
+        """
+        if not is_iterable(perm_list) or isinstance(perm_list, str):
+            raise ValueError("perm_list must be an iterable of permissions.")
+        return all(self.has_perm(perm, obj) for perm in perm_list)
+
     def has_module_perms(self, app_label: str) -> bool:
         """
         Return True if the user has any permissions in the given app label.
@@ -207,6 +228,11 @@ class AnonymousUser(base_models.AnonymousUser):
 
     def has_perm(self, perm: str, obj: Optional[object] = None) -> bool:
         return _user_has_perm(self, perm, obj=obj)  # type: ignore[no-any-return]
+
+    def has_perms(self, perm_list: Iterable[str], obj: Optional[object] = None) -> bool:
+        if not is_iterable(perm_list) or isinstance(perm_list, str):
+            raise ValueError("perm_list must be an iterable of permissions.")
+        return all(self.has_perm(perm, obj) for perm in perm_list)
 
     def has_module_perms(self, module: str) -> bool:
         return _user_has_module_perms(self, module)  # type: ignore[no-any-return]
