@@ -191,6 +191,24 @@ class UserTestCase(TestCase):
         self.assertTrue(hasattr(user, 'has_module_perms'))
         self.assertTrue(callable(user.has_module_perms))
 
+    def test_has_attributes_and_methods_required_by_django_rest_framework(self) -> None:
+        # See:
+        # - https://github.com/encode/django-rest-framework/blob/de018df2/rest_framework/authentication.py # noqa: E501
+        # - https://github.com/encode/django-rest-framework/blob/de018df2/rest_framework/permissions.py # noqa: E501
+        user = User()
+
+        self.assertTrue(hasattr(user, 'is_active'))
+        self.assertIsInstance(user.is_active, bool)
+
+        self.assertTrue(hasattr(user, 'is_authenticated'))
+        self.assertIsInstance(user.is_authenticated, bool)
+
+        self.assertTrue(hasattr(user, 'is_staff'))
+        self.assertIsInstance(user.is_staff, bool)
+
+        self.assertTrue(hasattr(user, 'has_perms'))
+        self.assertTrue(callable(user.has_perms))
+
 
 class IsActiveTestCase(TestCase):
     """
@@ -272,3 +290,18 @@ class AnonymousUserTests(SimpleTestCase):
 
         self.assertTrue(hasattr(user, 'has_module_perms'))
         self.assertTrue(callable(user.has_module_perms))
+
+    def test_has_attributes_and_methods_required_by_django_rest_framework(self) -> None:
+        user = User()
+
+        self.assertTrue(hasattr(user, 'is_active'))
+        self.assertIsInstance(user.is_active, bool)
+
+        self.assertTrue(hasattr(user, 'is_authenticated'))
+        self.assertIsInstance(user.is_authenticated, bool)
+
+        self.assertTrue(hasattr(user, 'is_staff'))
+        self.assertIsInstance(user.is_staff, bool)
+
+        self.assertTrue(hasattr(user, 'has_perms'))
+        self.assertTrue(callable(user.has_perms))
