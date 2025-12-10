@@ -6,6 +6,12 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.17.0 (2025-12-09)
++++++++++++++++++++
+
+- (PR #380, 2025-12-09) Add methods required by Django REST Framework to `.models.User`
+- (PR #381, 2025-12-09) chore: Bump the production-dependencies group with 2 updates
+
 0.16.0 (2025-12-04)
 +++++++++++++++++++
 
