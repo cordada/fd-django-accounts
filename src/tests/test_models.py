@@ -292,7 +292,7 @@ class AnonymousUserTests(SimpleTestCase):
         self.assertTrue(callable(user.has_module_perms))
 
     def test_has_attributes_and_methods_required_by_django_rest_framework(self) -> None:
-        user = User()
+        user = self.user
 
         self.assertTrue(hasattr(user, 'is_active'))
         self.assertIsInstance(user.is_active, bool)
