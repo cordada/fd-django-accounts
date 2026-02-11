@@ -25,12 +25,32 @@ DATABASES = {
 ROOT_URLCONF = "tests.urls"
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',  # Required by 'django.contrib.auth' for permissions.
+    'django.contrib.messages',  # Required by 'django.contrib.admin'.
+    'django.contrib.sessions',  # Required by 'django.contrib.admin'.
     'fd_dj_accounts',
 ]
 
-MIDDLEWARE = ()
+MIDDLEWARE = [
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Required by 'django.contrib.admin'.
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Required by 'django.contrib.admin'
+    'django.contrib.messages.middleware.MessageMiddleware',  # Required by 'django.contrib.admin'.
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },  # Required by 'django.contrib.admin'.
+]
 
 ###############################################################################
 # auth and package-related
