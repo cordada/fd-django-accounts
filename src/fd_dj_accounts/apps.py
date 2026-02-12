@@ -14,7 +14,7 @@ class AccountsAppConfig(AppConfig):
     # note: the app name must be the same as the top Python package name (see its docstring).
     name = 'fd_dj_accounts'
 
-    verbose_name = 'Fyndata Accounts'
+    verbose_name = 'FD Accounts'
 
     def ready(self) -> None:
         _validate_app_settings()
