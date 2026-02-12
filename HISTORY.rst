@@ -6,6 +6,17 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.18.0 (2026-02-12)
++++++++++++++++++++
+
+- (PR #384, 2025-12-09) Model test for `AnonymousUser` does not test correct class
+- (PR #390, 2026-02-11) Rename Django app to 'FD Accounts'
+- (PR #389, 2026-02-11) chore: Bump wheel from 0.45.1 to 0.46.2
+- (PR #391, 2026-02-11) Add Django Admin for `User`
+- (PR #387, 2026-02-11) chore: Bump tox from 4.30.2 to 4.30.3
+- (PR #385, 2026-02-11) chore: Bump mypy from 1.18.2 to 1.19.1
+- (PR #388, 2026-02-11) chore: Bump psycopg2 from 2.9.10 to 2.9.11
+
 0.17.0 (2025-12-09)
 +++++++++++++++++++
 
