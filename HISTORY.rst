@@ -6,6 +6,9 @@ History
 unreleased (YYYY-MM-DD)
 +++++++++++++++++++++++
 
+0.19.0 (2026-05-06)
++++++++++++++++++++
+
 - (PR #399, 2026-04-29) chore: Drop support for Python 3.9
 
 0.18.0 (2026-02-12)
