@@ -1,7 +1,7 @@
 -r requirements.txt
 
 build==1.4.4
-bumpversion==0.5.3
+bumpversion==0.6.0
 setuptools==80.9.0
 twine==6.2.0
 wheel==0.47.0
